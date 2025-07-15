@@ -1,0 +1,114 @@
+/* src/components/FormLayout.css */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+.form-layout-container {
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 420px; /* 모바일 화면 너비 기준 */
+  margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
+  border-radius: 12px; /* 둥근 모서리 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+}
+
+.header {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;
+  justify-content: center; /* Center content vertically */
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb; /* neutral-200 */
+}
+
+.logo-container {
+  margin-bottom: 1rem; /* Space between logo and title */
+}
+
+.logo {
+  width: 100px; /* Adjust size as needed */
+  height: 100px; /* Adjust size as needed */
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #374151; /* neutral-700 */
+  cursor: pointer;
+}
+
+.header-title {
+  font-size: 1.125rem; /* text-lg */
+  color: #111827; /* neutral-900 */
+  font-weight: 600;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem; /* text-sm */
+  color: #374151; /* neutral-700 */
+}
+
+.input, .select, .textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db; /* neutral-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #6b7280; /* ring-2 ring-neutral-500 */
+}
+
+.textarea {
+  resize: none;
+}
+
+.bottom-action {
+  padding-top: 1.5rem;
+  margin-top: auto; /* Push to the bottom */
+}
+
+.submit-button {
+  width: 100%;
+  background-color: #111827; /* neutral-900 */
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem; /* rounded-lg */
+  border: none;
+  cursor: pointer;
+}
+
+.link-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.link-text a {
+  color: #111827;
+  text-decoration: underline;
+}
