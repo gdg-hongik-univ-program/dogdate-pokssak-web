@@ -8,6 +8,13 @@ import './FormLayout.css';
 const regionOptions = [
     { value: 'seoul', label: '서울' },
     { value: 'busan', label: '부산' },
+    { value: 'incheon', label: '인천' },
+    { value: 'gwangju', label: '광주' },
+    { value: 'daegu', label: '대구' },
+    { value: 'daejeon', label: '대전' },
+    { value: 'sejong', label: '세종' },
+    { value: 'ulsan', label: '울산' },
+    { value: 'gyeonggi', label: '경기' },
 ];
 
 const genderOptions = [
