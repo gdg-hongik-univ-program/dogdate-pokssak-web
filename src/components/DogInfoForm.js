@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './FormLayout.css'; // 공통 스타일 사용
 import './DogInfoForm.css'; // DogInfoForm 고유 스타일
 
-const dogBreedOptions ='';
 function DogInfoForm() {
   const [dogInfo, setDogInfo] = useState({
     name: '',
@@ -99,5 +98,4 @@ function DogInfoForm() {
     </div>
   );
 }
-
 export default DogInfoForm;
