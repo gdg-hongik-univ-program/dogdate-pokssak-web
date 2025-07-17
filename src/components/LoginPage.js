@@ -19,15 +19,14 @@ function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('로그인 시도:', formData);
-    alert('로그인 성공!');
-    navigate('/home');
+    navigate('/app/home');
   };
 
   return (
     <div className="form-layout-container">
       <header className="header">
         <div className="logo-container">
-          <img src="/images/logo.svg" alt="Logo" className="logo" />
+          <img src="/images/image.png" alt="Logo" className="logo" />
         </div>
         <h1 className="header-title">로그인</h1>
       </header>

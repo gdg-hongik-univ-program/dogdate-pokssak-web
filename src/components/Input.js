@@ -2,7 +2,7 @@
 import React from 'react';
 import './Input.css';
 
-function Input({ label, type, name, value, onChange, required = false }) {
+function Input({ label, type, name, value, onChange, required = false, error }) {
   return (
     <div className="input-group">
       <label htmlFor={name} className="label">{label}</label>
@@ -15,6 +15,7 @@ function Input({ label, type, name, value, onChange, required = false }) {
         required={required}
         className="input"
       />
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

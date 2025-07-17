@@ -2,7 +2,7 @@
 import React from 'react';
 import './Select.css';
 
-function Select({ label, name, value, onChange, options }) {
+function Select({ label, name, value, onChange, options, error }) {
   return (
     <div className="select-group">
       <label htmlFor={name} className="label">{label}</label>
@@ -14,6 +14,7 @@ function Select({ label, name, value, onChange, options }) {
           </option>
         ))}
       </select>
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 }

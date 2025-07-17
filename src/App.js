@@ -16,14 +16,15 @@ function App() {
     <Router>
       <Routes>
         {/* 로그인/회원가입 경로 */}
+        <Route path="/" element={<LoginPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup-user" element={<UserInfoForm />} />
         <Route path="/signup-dog" element={<DogInfoForm />} />
         <Route path="/signup-success" element={<SignupSuccessPage />} />
 
         {/* 메인 화면 경로 */}
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Navigate to="/home" replace />} />
+        <Route path="/app" element={<MainLayout />}>
+          <Route index element={<Navigate to="/app/home" replace />} />
           <Route path="home" element={<HomePage />} />
           <Route path="likes" element={<LikesPage />} />
           <Route path="match" element={<MatchPage />} />

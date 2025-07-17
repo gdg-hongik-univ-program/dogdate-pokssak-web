@@ -13,9 +13,20 @@ const navItems = [
 function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const handleLogout = () => {
+    // 실제 로그아웃 로직 (예: localStorage.removeItem('token');)
+    // 현재는 세션 관리가 없으므로, 단순히 로그인 페이지로 리디렉션
+    navigate('/login');
+  };
 
   return (
     <div className="main-layout">
+      <header className="main-header"> {/* 새 헤더 추가 */}
+        <h1 className="main-header-title">Mungeting</h1> {/* 앱 이름 또는 로고 */}
+        <button onClick={handleLogout} className="logout-button">
+          로그아웃
+        </button>
+      </header>
       <main className="main-content">
         <Outlet />
       </main>

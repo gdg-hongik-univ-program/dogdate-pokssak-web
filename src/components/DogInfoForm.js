@@ -4,15 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './FormLayout.css'; // 공통 스타일 사용
 import './DogInfoForm.css'; // DogInfoForm 고유 스타일
 
-const dogBreedOptions = [
-  { value: 'golden_retriever', label: '골든 리트리버' },
-  { value: 'shiba_inu', label: '시바견' },
-  { value: 'poodle', label: '푸들' },
-  { value: 'maltese', label: '말티즈' },
-  { value: 'chihuahua', label: '치와와' },
-  { value: 'etc', label: '기타' },
-];
-
+const dogBreedOptions ='';
 function DogInfoForm() {
   const [dogInfo, setDogInfo] = useState({
     name: '',
@@ -74,10 +66,7 @@ function DogInfoForm() {
 
           <div className="input-group">
             <label className="label">견종</label>
-            <select name="breed" value={dogInfo.breed} onChange={handleChange} className="select">
-              <option value="">견종을 선택하세요</option>
-              {dogBreedOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-            </select>
+            <input type="text" name="breed" placeholder="견종을 입력하세요" value={dogInfo.breed} onChange={handleChange} className="input" />
           </div>
 
           <div className="input-group">

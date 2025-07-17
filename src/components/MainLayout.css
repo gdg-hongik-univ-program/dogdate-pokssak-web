@@ -11,6 +11,31 @@
   overflow: hidden; /* 내용이 넘칠 경우 숨김 */
 }
 
+.main-header { /* 새로 추가된 헤더 스타일 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.main-header-title { /* 헤더 타이틀 스타일 */
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+}
+
+.logout-button { /* 로그아웃 버튼 스타일 */
+  background-color: #ef4444; /* Red color for logout */
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
 .main-content {
   flex: 1;
   overflow-y: auto;

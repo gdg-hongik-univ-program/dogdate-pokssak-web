@@ -31,22 +31,55 @@ function UserInfoForm() {
         region: '',
         gender: '',
     });
-    const [error, setError] = useState('');
+    // error 상태를 객체로 변경
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        // 입력이 변경될 때 해당 필드의 에러 메시지 제거
+        setErrors((prev) => ({ ...prev, [name]: '' }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        let newErrors = {};
+        let isValid = true;
+
         if (formData.password !== formData.passwordConfirm) {
-            setError('비밀번호가 일치하지 않습니다.');
-            return;
+            newErrors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
+            isValid = false;
         }
-        setError('');
-        navigate('/signup-dog', { state: { userInfo: formData } });
+
+        // 다른 필드에 대한 유효성 검사 추가 (예시)
+        if (!formData.nickname) {
+            newErrors.nickname = '별명을 입력해주세요.';
+            isValid = false;
+        }
+        if (!formData.id) {
+            newErrors.id = 'ID를 입력해주세요.';
+            isValid = false;
+        }
+        if (!formData.password) {
+            newErrors.password = '비밀번호를 입력해주세요.';
+            isValid = false;
+        }
+        if (!formData.region) {
+            newErrors.region = '사는곳을 선택해주세요.';
+            isValid = false;
+        }
+        if (!formData.gender) {
+            newErrors.gender = '성별을 선택해주세요.';
+            isValid = false;
+        }
+
+
+        setErrors(newErrors);
+
+        if (isValid) {
+            navigate('/signup-dog', { state: { userInfo: formData } });
+        }
     };
 
     return (
@@ -60,13 +93,12 @@ function UserInfoForm() {
             </header>
             <main className="content">
                 <form onSubmit={handleSubmit} className="form-content">
-                    <Input label="별명" type="text" name="nickname" value={formData.nickname} onChange={handleChange} required />
-                    <Input label="ID" type="text" name="id" value={formData.id} onChange={handleChange} required />
-                    <Input label="PW" type="password" name="password" value={formData.password} onChange={handleChange} required />
-                    <Input label="PW 확인" type="password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} required />
-                    <Select label="사는곳" name="region" value={formData.region} onChange={handleChange} options={regionOptions} />
-                    <Select label="성별" name="gender" value={formData.gender} onChange={handleChange} options={genderOptions} />
-                    {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+                    <Input label="별명" type="text" name="nickname" value={formData.nickname} onChange={handleChange} required error={errors.nickname} />
+                    <Input label="ID" type="text" name="id" value={formData.id} onChange={handleChange} required error={errors.id} />
+                    <Input label="PW" type="password" name="password" value={formData.password} onChange={handleChange} required error={errors.password} />
+                    <Input label="PW 확인" type="password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} required error={errors.passwordConfirm} />
+                    <Select label="사는곳" name="region" value={formData.region} onChange={handleChange} options={regionOptions} error={errors.region} />
+                    <Select label="성별" name="gender" value={formData.gender} onChange={handleChange} options={genderOptions} error={errors.gender} />
                     <div className="bottom-action">
                         <button type="submit" className="submit-button">다음</button>
                     </div>
