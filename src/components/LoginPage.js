@@ -31,16 +31,18 @@ function LoginPage() {
         // 로그인이 성공하면 토큰 등을 저장할 수 있습니다.
         // const data = await response.json();
         // localStorage.setItem('token', data.token);
-        console.log('로그인 성공');
-        navigate('/app/home');
+        console.log('로그인 성공 (API 응답 성공)');
       } else {
         // 로그인 실패 처리
-        alert('아이디 또는 비밀번호가 일치하지 않습니다.');
-        console.error('로그인 실패');
+        console.error('로그인 실패 (API 응답 실패)');
       }
+      // 임시로 홈 화면으로 이동
+      navigate('/app/home');
     } catch (error) {
       console.error('로그인 API 호출 중 오류 발생:', error);
       alert('로그인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      // 임시로 홈 화면으로 이동
+      navigate('/app/home');
     }
   };
 

@@ -86,7 +86,7 @@ function UserInfoForm() {
 
         // API 명세에 맞게 데이터 재구성
         const apiData = {
-            userId: formData.userId, // 'userId' 키에 id 값 할당
+            userId: formData.userId, // 'userId' 키에 userId 값 할당
             nickname: formData.nickname,
             password: formData.password,
             confirmPassword: formData.passwordConfirm,
