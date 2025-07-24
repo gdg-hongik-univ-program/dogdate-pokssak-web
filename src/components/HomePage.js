@@ -51,6 +51,15 @@ function HomePage() {
     setSelectedDog(null);
   };
 
+  const handleSaveMyDog = (updatedDog) => {
+    console.log("Saving dog:", updatedDog);
+    // 실제 앱에서는 여기서 API를 호출하여 백엔드에 정보를 저장해야 합니다.
+    // 지금은 프론트엔드의 상태만 업데이트합니다.
+    setMyDog(updatedDog);
+    // 사용자에게 저장되었음을 알립니다.
+    alert("프로필이 저장되었습니다!");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,12 +84,18 @@ function HomePage() {
   }
 
   return (
+
     <div className="home-container">
       {/* 내 강아지 프로필 섹션 */}
       <section className="my-dog-section">
         <h2 className="section-title">내 강아지</h2>
-        <div className="my-dog-profile-wrapper" onClick={() => openModal(myDog)}>
-          <DogProfileCard dog={myDog} />
+        <div className="my-dog-profile-wrapper">
+          <DogProfileCard 
+            dog={myDog} 
+            isEditable={true} 
+            onSave={handleSaveMyDog}
+            onClick={() => openModal(myDog)} 
+          />
         </div>
       </section>
       <div className="hall-of-fame-section">
