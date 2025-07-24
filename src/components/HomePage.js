@@ -1,6 +1,7 @@
 // src/components/HomePage.js
 import React, { useState, useEffect } from 'react';
 import './HomePage.css'; // 새로 만든 CSS 파일을 import
+import ProfileModal from './ProfileModal'; // 모달 컴포넌트 import
 
 // API 호출을 위한 가짜 데이터 (실제로는 API로 받아와야 함)
 const fakeMyDog = {
@@ -33,6 +34,16 @@ function HomePage() {
   const [popularDogs, setPopularDogs] = useState([]);
   const [nearbyDogs, setNearbyDogs] = useState([]);
   const [error, setError] = useState('');
+  const [selectedDog, setSelectedDog] = useState(null); // 모달에 표시할 강아지 정보
+
+  // 모달 열기/닫기 함수
+  const openModal = (dog) => {
+    setSelectedDog(dog);
+  };
+
+  const closeModal = () => {
+    setSelectedDog(null);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +73,7 @@ function HomePage() {
       {/* 내 강아지 프로필 섹션 */}
       <section className="my-dog-section">
         <h2 className="section-title">내 강아지</h2>
-        <div className="my-dog-card">
+        <div className="my-dog-card" onClick={() => openModal(myDog)}>
           <img src={myDog.imageUrl} alt={`${myDog.name} 프로필 사진`} />
           <h3 className="dog-name">{myDog.name}</h3>
           <p className="dog-details">{myDog.breed} / {myDog.age}살</p>
@@ -78,7 +89,7 @@ function HomePage() {
         <div className="dog-list-scroll-container">
           <div className="dog-list">
             {nearbyDogs.map(dog => (
-              <div key={dog.id} className="dog-card">
+              <div key={dog.id} className="dog-card" onClick={() => openModal(dog)}>
                 <img src={dog.imageUrl} alt={`${dog.name} 프로필 사진`} />
                 <h3 className="dog-name">{dog.name}</h3>
                 <p className="dog-details">{dog.breed} / {dog.age}살</p>
@@ -95,7 +106,7 @@ function HomePage() {
         <div className="dog-list-scroll-container">
           <div className="dog-list">
             {popularDogs.map(dog => (
-              <div key={dog.id} className="dog-card">
+              <div key={dog.id} className="dog-card" onClick={() => openModal(dog)}>
                 <img src={dog.imageUrl} alt={`${dog.name} 프로필 사진`} />
                 <h3 className="dog-name">{dog.name}</h3>
                 <p className="dog-details">{dog.breed} / {dog.age}살</p>
@@ -105,6 +116,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 프로필 모달 */}
+      <ProfileModal dog={selectedDog} onClose={closeModal} />
     </div>
   );
 }
