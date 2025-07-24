@@ -1,6 +1,6 @@
 /* src/components/HomePage.css */
 .home-container {
-    padding: 2rem;
+    padding: 1.5rem 2rem; /* 상하 여백 조절 */
     text-align: center;
 }
 
@@ -33,21 +33,22 @@
     margin-bottom: 1rem;
 }
 
-.dog-name {
+
+.my-dog-card .dog-name {
     font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
-.dog-details {
+.my-dog-card .dog-details {
     font-size: 1rem;
     color: #555;
 }
 
 /* 멍예의 전당 섹션 공통 스타일 */
 .hall-of-fame-section {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     text-align: left; /* 제목 왼쪽 정렬 */
 }
 
@@ -73,16 +74,16 @@
 
 .dog-list {
     display: flex;
-    gap: 1.5rem; /* 카드 사이 간격 */
+    gap: 1rem; /* 카드 사이 간격 */
     padding-right: 1rem; /* 마지막 카드 잘리지 않도록 여백 */
 }
 
 .dog-card {
     flex: 0 0 auto; /* 카드 크기 고정, 줄 바꿈 방지 */
-    width: calc((100% / 2.5) - 1.5rem); /* 2.5개 보이도록 너비 설정 (gap 고려) */
+    width: 130px; /* 카드 너비 조절 */
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 1rem;
+    padding: 0.8rem; /* 카드 내부 여백 조절 */
     background-color: #f9f9f9;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     text-align: center;
@@ -93,5 +94,17 @@
     height: 120px; /* 이미지 높이 조절 */
     object-fit: cover;
     border-radius: 8px;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.dog-card .dog-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.dog-card .dog-details {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.2;
 }
