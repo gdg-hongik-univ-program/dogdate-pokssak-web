@@ -1,5 +1,5 @@
 // src/components/DogInfoForm.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './FormLayout.css'; // 공통 스타일 사용
 import './DogInfoForm.css'; // DogInfoForm 고유 스타일
@@ -13,6 +13,7 @@ function DogInfoForm() {
     introduction: '',
     photo: null,
   });
+  const [photoPreview, setPhotoPreview] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const userInfo = location.state?.userInfo;
@@ -23,10 +24,19 @@ function DogInfoForm() {
   };
 
   const handlePhotoChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setDogInfo((prev) => ({ ...prev, photo: e.target.files[0] }));
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setDogInfo((prev) => ({ ...prev, photo: file }));
+      if (photoPreview) {
+        URL.revokeObjectURL(photoPreview); // 이전 프리뷰 URL 메모리 해제
+      }
+      setPhotoPreview(URL.createObjectURL(file));
     }
   };
+
+  useEffect(() => {
+    return () => photoPreview && URL.revokeObjectURL(photoPreview);
+  }, [photoPreview]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,8 +58,8 @@ function DogInfoForm() {
         <form onSubmit={handleSubmit} className="form-content">
           <div className="photo-upload-section">
             <label htmlFor="photo-upload" className="photo-upload-box">
-              {dogInfo.photo ? (
-                <img src={URL.createObjectURL(dogInfo.photo)} alt="preview" className="photo-preview" />
+              {photoPreview ? (
+                <img src={photoPreview} alt="preview" className="photo-preview" />
               ) : (
                 <i className="fa-solid fa-plus"></i>
               )}

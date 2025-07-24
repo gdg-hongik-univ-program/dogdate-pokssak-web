@@ -1,72 +1,58 @@
 /* src/components/HomePage.css */
 .home-container {
-    padding: 1.5rem 2rem; /* 상하 여백 조절 */
-    text-align: center;
+    padding: 1rem;
+    background-color: #f9fafb;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 /* 내 강아지 섹션 */
 .my-dog-section {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .section-title {
-    font-size: 1.8rem;
+    font-size: 1.25rem;
     font-weight: bold;
-    margin-bottom: 1.5rem;
-}
-
-.my-dog-card {
-    display: inline-block;
-    border: 2px solid #8A2BE2; /* 보라색 테두리 */
-    border-radius: 15px;
-    padding: 1.5rem;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    width: 250px; /* 내 강아지 카드 크기 조절 */
-}
-
-.my-dog-card img {
-    width: 180px; /* 내 강아지 이미지 크기 조절 */
-    height: 180px; /* 내 강아지 이미지 크기 조절 */
-    object-fit: cover;
-    border-radius: 10px;
+    color: #111827;
     margin-bottom: 1rem;
-}
-
-
-.my-dog-card .dog-name {
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.my-dog-card .dog-details {
-    font-size: 1rem;
-    color: #555;
+    padding: 0 1rem; /* 좌우 여백 추가 */
 }
 
 /* 멍예의 전당 섹션 공통 스타일 */
 .hall-of-fame-section {
     margin-top: 2rem;
     margin-bottom: 2rem;
-    text-align: left; /* 제목 왼쪽 정렬 */
 }
 
-.hall-of-fame-section .section-title {
-    margin-left: 2rem; /* 섹션 제목 왼쪽 여백 */
+.my-dog-profile-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 0 1rem; /* 좌우 여백 추가 */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.my-dog-profile-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.my-dog-profile-wrapper .dog-profile-card {
+    width: 100%;
 }
 
 .dog-list-scroll-container {
     overflow-x: scroll; /* 가로 스크롤 */
     -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
-    padding-bottom: 1rem; /* 스크롤바 공간 확보 */
-    margin: 0 2rem; /* 좌우 여백 */
+    padding: 0.5rem 0 1rem 0; /* Add some padding for aesthetics */
 }
 
 /* 스크롤바 숨기기 (선택 사항) */
 .dog-list-scroll-container::-webkit-scrollbar {
     display: none;
 }
+
 .dog-list-scroll-container {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
@@ -75,36 +61,73 @@
 .dog-list {
     display: flex;
     gap: 1rem; /* 카드 사이 간격 */
-    padding-right: 1rem; /* 마지막 카드 잘리지 않도록 여백 */
+    padding: 0 1rem; /* Add horizontal padding to the list itself */
 }
 
 .dog-card {
-    flex: 0 0 auto; /* 카드 크기 고정, 줄 바꿈 방지 */
-    width: 130px; /* 카드 너비 조절 */
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 0.8rem; /* 카드 내부 여백 조절 */
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    text-align: center;
+  position: relative; /* For positioning children */
+  flex: 0 0 150px; /* 각 카드의 너비를 150px로 고정 */
+  width: 150px;
+  aspect-ratio: 1 / 1.25; /* 세로가 약간 긴 카드 비율 */
+  background-color: #f0f0f0; /* Fallback color */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.dog-card img {
-    width: 100%;
-    height: 120px; /* 이미지 높이 조절 */
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
+.dog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.dog-card-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.dog-card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Push content to the bottom */
+  padding: 0.75rem;
+  box-sizing: border-box;
+  /* Gradient for text readability */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 20%, transparent 80%);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .dog-card .dog-name {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dog-card .dog-details {
-    font-size: 0.8rem;
-    color: #666;
-    line-height: 1.2;
+  font-size: 0.75rem;
+  color: #e0e0e0;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.dog-card .dog-extra-info {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 0.25rem;
 }

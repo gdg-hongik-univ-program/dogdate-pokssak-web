@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/npm/g-market-sans@1.0.0/css/GmarketSans.css');
+
 /* src/components/MainLayout.css */
 .main-layout {
   display: flex;
@@ -21,9 +23,11 @@
 }
 
 .main-header-title { /* 헤더 타이틀 스타일 */
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-family: 'GmarketSansMedium', 'Pretendard Variable', sans-serif;
+  font-size: 1.5rem; /* 24px */
+  font-weight: 700; /* Bold */
   color: #111827;
+  letter-spacing: -0.5px; /* 자간을 살짝 좁혀서 더 보기 좋게 */
 }
 
 .logout-button { /* 로그아웃 버튼 스타일 */
@@ -65,6 +69,7 @@
   gap: 4px;
   color: #9ca3af; /* neutral-400 */
   font-size: 0.75rem;
+  text-decoration: none; /* NavLink가 a 태그로 렌더링되므로 밑줄 제거 */
 }
 
 .nav-item i {

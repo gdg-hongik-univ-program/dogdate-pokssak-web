@@ -1,38 +1,58 @@
-// src/App.js
 import React from 'react';
+import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+// 페이지 컴포넌트 임포트
 import LoginPage from './components/LoginPage';
 import UserInfoForm from './components/UserInfoForm';
 import DogInfoForm from './components/DogInfoForm';
-import SignupSuccessPage from './components/SignupSuccessPage';
 import MainLayout from './components/MainLayout';
-import HomePage from './components/HomePage';
-import LikesPage from './components/LikesPage';
-import MatchPage from './components/MatchPage';
-import ChatPage from './components/ChatPage';
+import HomePage from './components/HomePage'; // HomePage가 있다고 가정합니다.
+
+// 임시 성공 페이지
+const SignupSuccessPage = () => (
+  <div style={{ textAlign: 'center', marginTop: '50px', padding: '20px' }}>
+    <h1>🎉 회원가입 성공! 🎉</h1>
+    <p>이제 당신의 반려견과 새로운 친구들을 만날 준비가 되었습니다.</p>
+    <a href="/login" style={{ display: 'inline-block', marginTop: '20px', padding: '10px 20px', backgroundColor: '#111827', color: 'white', textDecoration: 'none', borderRadius: '8px' }}>
+      로그인하러 가기
+    </a>
+  </div>
+);
+
+// 아직 만들지 않은 페이지들을 위한 임시 컴포넌트
+const LikesPage = () => <div style={{ padding: '20px' }}>하트 페이지입니다.</div>;
+const MatchPage = () => <div style={{ padding: '20px' }}>매치 페이지입니다.</div>;
+const ChatPage = () => <div style={{ padding: '20px' }}>채팅 페이지입니다.</div>;
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* 로그인/회원가입 경로 */}
-        <Route path="/" element={<LoginPage />} />
+        {/* 1. 앱 시작 시 /login 페이지로 자동 이동 */}
+        <Route path="/" element={<Navigate replace to="/login" />} />
+        {/* 2. 로그인 및 회원가입 관련 페이지 */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup-user" element={<UserInfoForm />} />
         <Route path="/signup-dog" element={<DogInfoForm />} />
         <Route path="/signup-success" element={<SignupSuccessPage />} />
 
-        {/* 메인 화면 경로 */}
+        {/* 3. 로그인 후 진입하는 메인 앱 (MainLayout 안에 페이지들이 표시됨) */}
         <Route path="/app" element={<MainLayout />}>
-          <Route index element={<Navigate to="/app/home" replace />} />
+          {/* /app 으로 접속 시, 자동으로 /app/home 으로 이동 */}
+          <Route index element={<Navigate replace to="/app/home" />} />
           <Route path="home" element={<HomePage />} />
           <Route path="likes" element={<LikesPage />} />
           <Route path="match" element={<MatchPage />} />
           <Route path="chat" element={<ChatPage />} />
         </Route>
 
-        {/* 다른 모든 경로는 로그인 페이지로 리디렉션 */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        {/* 4. 정의되지 않은 경로로 접근 시 */}
+        <Route path="*" element={
+          <div style={{ textAlign: 'center', marginTop: '50px' }}>
+            <h1>404 - 페이지를 찾을 수 없습니다.</h1>
+          </div>
+        } />
       </Routes>
     </Router>
   );
