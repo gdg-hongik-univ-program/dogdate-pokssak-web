@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './HomePage.css'; // 새로 만든 CSS 파일을 import
 import ProfileModal from './ProfileModal'; // 모달 컴포넌트 import
 import DogProfileCard from './DogprofileCard'; // DogProfileCard 컴포넌트 import
+import { FiSettings } from "react-icons/fi"; // 상단 import 추가
 
 // API 호출을 위한 가짜 데이터 (실제로는 API로 받아와야 함)
 const fakeMyDog = {
@@ -88,13 +89,18 @@ function HomePage() {
     <div className="home-container">
       {/* 내 강아지 프로필 섹션 */}
       <section className="my-dog-section">
-        <h2 className="section-title">내 강아지</h2>
+        <div className="my-dog-header-row">
+          <h2 className="section-title">내 강아지</h2>
+          <button className="settings-button" aria-label="환경설정">
+            <FiSettings size={28} color="#111" />
+          </button>
+        </div>
         <div className="my-dog-profile-wrapper">
           <DogProfileCard 
             dog={myDog} 
             isEditable={true} 
             onSave={handleSaveMyDog}
-            onClick={() => openModal(myDog)} 
+            onClick={() => openModal(myDog)}  
           />
         </div>
       </section>
@@ -141,7 +147,7 @@ function HomePage() {
       </section>
 
       {/* 프로필 모달 */}
-      <ProfileModal dog={selectedDog} onClose={closeModal} />
+      <ProfileModal dog={selectedDog} onClose={closeModal} isMyDog={selectedDog === myDog} />
     </div>
   );
 }

@@ -8,16 +8,37 @@
 }
 
 /* 내 강아지 섹션 */
-.my-dog-section {
-    margin-bottom: 2rem;
+.my-dog-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .section-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #111827;
-    margin-bottom: 1rem;
-    padding: 0 1rem; /* 좌우 여백 추가 */
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.settings-button {
+  background: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  padding: 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.4rem;
+  width: 2.4rem;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.settings-button:hover {
+  background: #bdbdbd;
 }
 
 /* 멍예의 전당 섹션 공통 스타일 */

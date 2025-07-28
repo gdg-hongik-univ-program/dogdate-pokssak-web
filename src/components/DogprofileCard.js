@@ -1,7 +1,7 @@
 import React from 'react';
 import './DogProfileCard.css';
 
-const DogProfileCard = ({ dog }) => {
+const DogProfileCard = ({ dog, onClick }) => {
   if (!dog) {
     return null; // or a loading/placeholder component
   }
@@ -10,7 +10,7 @@ const DogProfileCard = ({ dog }) => {
   const displayGender = dog.gender === 'male' || dog.gender === '남아' || dog.gender === '수컷' ? '남아' : '여아';
 
   return (
-    <div className="dog-profile-card">
+    <div className="dog-profile-card" onClick={onClick}>
       <div className="dog-profile-image-container">
         <img 
           src={dog.imageUrl}

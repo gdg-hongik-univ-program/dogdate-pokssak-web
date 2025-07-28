@@ -3,7 +3,7 @@
 
 .form-layout-container {
   background-color: #ffffff;
-  min-height: 100vh;
+  min-height: 97vh;
   display: flex;
   flex-direction: column;
   max-width: 420px; /* 모바일 화면 너비 기준 */
@@ -14,6 +14,7 @@
 }
 
 .header {
+
   display: flex;
   flex-direction: column; /* Stack items vertically */
   align-items: center;

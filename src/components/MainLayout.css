@@ -4,7 +4,7 @@
 .main-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 97vh;
   background-color: #ffffff;
   max-width: 420px; /* 모바일 화면 너비 기준 */
   margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
@@ -20,6 +20,7 @@
   padding: 1rem;
   border-bottom: 1px solid #e5e7eb;
   background-color: #f9fafb;
+  flex-wrap: wrap; /* Allow items to wrap if space is limited */
 }
 
 .main-header-title { /* 헤더 타이틀 스타일 */
@@ -32,6 +33,24 @@
 
 .logout-button { /* 로그아웃 버튼 스타일 */
   background-color: #ef4444; /* Red color for logout */
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  margin-left: auto; /* Push to the right */
+}
+
+.settings-button-container {
+  width: 100%; /* Take full width to appear below logout button */
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  margin-top: 0.5rem; /* Space from logout button */
+}
+
+.settings-button {
+  background-color: #6b7280; /* Neutral color for settings */
   color: #ffffff;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;

@@ -3,7 +3,7 @@
 import React from 'react';
 import './ProfileModal.css';
 
-function ProfileModal({ dog, onClose }) {
+function ProfileModal({ dog, onClose, isMyDog }) {
   if (!dog) return null;
 
   // 배경(backdrop) 클릭 시 모달이 닫히도록 처리
@@ -23,6 +23,11 @@ function ProfileModal({ dog, onClose }) {
       <div className="modal-card">
         <img src={dog.imageUrl} alt={dog.name} className="modal-card-background-image" />
         <div className="modal-card-content">
+          {isMyDog && (
+            <button className="modal-edit-button">
+              <i className="fa-solid fa-pen"></i>
+            </button>
+          )}
           <button className="modal-close-icon" onClick={onClose}>
             <i className="fa-solid fa-xmark"></i>
           </button>
