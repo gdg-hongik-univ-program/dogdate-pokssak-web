@@ -21,8 +21,7 @@ const SignupSuccessPage = () => (
   </div>
 );
 
-// 아직 만들지 않은 페이지들을 위한 임시 컴포넌트
-const LikesPage = () => <div style={{ padding: '20px' }}>하트 페이지입니다.</div>;
+import LikesPage from './components/LikesPage';
 const MatchPage = () => <div style={{ padding: '20px' }}>매치 페이지입니다.</div>;
 
 function App() {

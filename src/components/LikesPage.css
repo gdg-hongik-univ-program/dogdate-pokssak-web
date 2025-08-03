@@ -1,0 +1,49 @@
+.likes-page-container {
+  padding: 20px;
+}
+
+.likes-page-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.toggle-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+  border-radius: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-btn.active {
+  background-color: #ff8c00;
+  color: white;
+  border-color: #ff8c00;
+}
+
+.toggle-btn:focus {
+  outline: none;
+}
+
+.dog-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .dog-profile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .dog-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
