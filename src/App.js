@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import ChatPage from './components/ChatPage';
 
 // 페이지 컴포넌트 임포트
 import LoginPage from './components/LoginPage';
@@ -23,7 +24,6 @@ const SignupSuccessPage = () => (
 // 아직 만들지 않은 페이지들을 위한 임시 컴포넌트
 const LikesPage = () => <div style={{ padding: '20px' }}>하트 페이지입니다.</div>;
 const MatchPage = () => <div style={{ padding: '20px' }}>매치 페이지입니다.</div>;
-const ChatPage = () => <div style={{ padding: '20px' }}>채팅 페이지입니다.</div>;
 
 function App() {
   return (
