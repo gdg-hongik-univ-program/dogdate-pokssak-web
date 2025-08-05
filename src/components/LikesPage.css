@@ -1,11 +1,13 @@
 .likes-page-container {
-  padding: 20px;
+  padding: 1rem;
+  max-width: 800px; /* 최대 너비 설정 */
+  margin: 0 auto; /* 페이지 중앙 정렬 */
 }
 
 .likes-page-toggle {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 }
 
 .toggle-btn {
@@ -29,21 +31,8 @@
   outline: none;
 }
 
-.dog-profile-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .dog-profile-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .dog-profile-grid {
-    grid-template-columns: 1fr;
-  }
+.likes-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 카드 사이의 간격 */
 }

@@ -1,11 +1,10 @@
-// src/components/HomePage.js
 import React, { useState, useEffect } from 'react';
-import './HomePage.css'; // 새로 만든 CSS 파일을 import
-import ProfileModal from './ProfileModal'; // 모달 컴포넌트 import
-import DogProfileCard from './DogprofileCard'; // DogProfileCard 컴포넌트 import
-import { FiSettings } from "react-icons/fi"; // 상단 import 추가
+import { useOutletContext } from 'react-router-dom'; // useOutletContext 임포트
+import './HomePage.css';
+import DogProfileCard from './DogprofileCard';
+import { FiSettings } from "react-icons/fi";
 
-// API 호출을 위한 가짜 데이터 (실제로는 API로 받아와야 함)
+// API 호출을 위한 가짜 데이터
 const fakeMyDog = {
   id: 0,
   name: '몽실이',
@@ -15,10 +14,8 @@ const fakeMyDog = {
   city: '서울',
   district: '강남구',
   bio: '우리 몽실이는 애교가 많고 사람을 좋아해요! 같이 산책할 친구를 찾아요.',
-  imageUrl: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?q=80&w=800', // 새로운 강아지 사진
+  imageUrl: 'https://images.unsplash.com/photo-1561037404-61cd46aa615b?q=80&w=800',
 };
-
-
 
 const fakePopularDogs = [
   { id: 1, name: '코코', breed: '말티즈', age: 2, gender: '여아', city: '서울', district: '마포구', bio: '에너지가 넘치는 코코입니다! 공놀이를 제일 좋아해요.', imageUrl: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=800', likes: 120 },
@@ -37,27 +34,15 @@ const fakeNearbyDogs = [
 ];
 
 function HomePage() {
+  const { openModal } = useOutletContext(); // MainLayout에서 openModal 함수를 가져옴
   const [myDog, setMyDog] = useState(null);
   const [popularDogs, setPopularDogs] = useState([]);
   const [nearbyDogs, setNearbyDogs] = useState([]);
   const [error, setError] = useState('');
-  const [selectedDog, setSelectedDog] = useState(null); // 모달에 표시할 강아지 정보
-
-  // 모달 열기/닫기 함수
-  const openModal = (dog) => {
-    setSelectedDog(dog);
-  };
-
-  const closeModal = () => {
-    setSelectedDog(null);
-  };
 
   const handleSaveMyDog = (updatedDog) => {
     console.log("Saving dog:", updatedDog);
-    // 실제 앱에서는 여기서 API를 호출하여 백엔드에 정보를 저장해야 합니다.
-    // 지금은 프론트엔드의 상태만 업데이트합니다.
     setMyDog(updatedDog);
-    // 사용자에게 저장되었음을 알립니다.
     alert("프로필이 저장되었습니다!");
   };
 
@@ -85,9 +70,7 @@ function HomePage() {
   }
 
   return (
-
     <div className="home-container">
-      {/* 내 강아지 프로필 섹션 */}
       <section className="my-dog-section">
         <div className="my-dog-header-row">
           <h2 className="section-title">내 강아지</h2>
@@ -108,7 +91,6 @@ function HomePage() {
         <h2 className="section-title">멍에의 전당</h2>
       </div>
 
-      {/* 위치 가까운 멍예의 전당 */}
       <section className="hall-of-fame-section">
         <h2 className="section-title">위치순</h2>
         <div className="dog-list-scroll-container">
@@ -127,7 +109,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* 하트 많이 받은 멍예의 전당 */}
       <section className="hall-of-fame-section">
         <h2 className="section-title">하트순</h2>
         <div className="dog-list-scroll-container">
@@ -145,9 +126,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* 프로필 모달 */}
-      <ProfileModal dog={selectedDog} onClose={closeModal} isMyDog={selectedDog === myDog} />
     </div>
   );
 }

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useOutletContext } from 'react-router-dom'; // useOutletContext 임포트
 import DogProfileCard from './DogprofileCard';
 import './LikesPage.css';
 
 const LikesPage = () => {
+  const { openModal } = useOutletContext(); // MainLayout에서 openModal 함수를 가져옴
   const [activeTab, setActiveTab] = useState('sent');
 
   // 목업 데이터
@@ -42,9 +44,9 @@ const LikesPage = () => {
           나에게 좋아요 한 사람
         </button>
       </div>
-      <div className="dog-profile-grid">
+      <div className="likes-list-vertical">
         {dataToShow.map(dog => (
-          <DogProfileCard key={dog.id} dog={dog} />
+          <DogProfileCard key={dog.id} dog={dog} onClick={() => openModal(dog)} />
         ))}
       </div>
     </div>
