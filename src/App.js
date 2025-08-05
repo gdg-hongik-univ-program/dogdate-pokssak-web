@@ -9,8 +9,9 @@ import UserInfoForm from './components/UserInfoForm';
 import DogInfoForm from './components/DogInfoForm';
 import MainLayout from './components/MainLayout';
 import HomePage from './components/HomePage'; // HomePage가 있다고 가정합니다.
+import LikesPage from './components/LikesPage';
+import MatchPage from './components/MatchPage';
 
-// 임시 성공 페이지
 const SignupSuccessPage = () => (
   <div style={{ textAlign: 'center', marginTop: '50px', padding: '20px' }}>
     <h1>🎉 회원가입 성공! 🎉</h1>
@@ -21,9 +22,7 @@ const SignupSuccessPage = () => (
   </div>
 );
 
-// 아직 만들지 않은 페이지들을 위한 임시 컴포넌트
-const LikesPage = () => <div style={{ padding: '20px' }}>하트 페이지입니다.</div>;
-const MatchPage = () => <div style={{ padding: '20px' }}>매치 페이지입니다.</div>;
+
 
 function App() {
   return (

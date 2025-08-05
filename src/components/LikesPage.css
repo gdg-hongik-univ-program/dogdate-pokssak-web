@@ -1,0 +1,38 @@
+.likes-page-container {
+  padding: 1rem;
+  max-width: 800px; /* 최대 너비 설정 */
+  margin: 0 auto; /* 페이지 중앙 정렬 */
+}
+
+.likes-page-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.toggle-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+  border-radius: 20px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-btn.active {
+  background-color: #ff8c00;
+  color: white;
+  border-color: #ff8c00;
+}
+
+.toggle-btn:focus {
+  outline: none;
+}
+
+.likes-list-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 카드 사이의 간격 */
+}

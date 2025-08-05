@@ -10,15 +10,15 @@ const DogProfileCard = ({ dog, onClick }) => {
   const displayGender = dog.gender === 'male' || dog.gender === '남아' || dog.gender === '수컷' ? '남아' : '여아';
 
   return (
-    <div className="dog-profile-card" onClick={onClick}>
-      <div className="dog-profile-image-container">
+    <div className="dog-profile-card-horizontal" onClick={onClick}>
+      <div className="dog-profile-image-container-horizontal">
         <img 
           src={dog.imageUrl}
           alt={dog.name}
-          className="dog-profile-image"
+          className="dog-profile-image-horizontal"
         />
       </div>
-      <div className="dog-profile-info">
+      <div className="dog-profile-info-horizontal">
         <div className="dog-profile-header">
           <h2 className="dog-name">{dog.name}</h2>
           <span className="dog-age">{dog.age}살</span>
@@ -32,6 +32,7 @@ const DogProfileCard = ({ dog, onClick }) => {
           <div className="dog-profile-location">
             <i className="fa-solid fa-location-dot"></i>
             <span>{dog.city} {dog.district}</span>
+            {dog.distance && <span className="dog-distance">· {dog.distance}</span>}
           </div>
         )}
         <p className="dog-profile-bio">{dog.bio || '한 줄 소개가 아직 없습니다.'}</p>

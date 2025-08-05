@@ -1,6 +1,6 @@
-// src/components/MainLayout.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, useNavigate, NavLink } from 'react-router-dom';
+import ProfileModal from './ProfileModal'; // ProfileModal 임포트
 import './MainLayout.css';
 
 const navItems = [
@@ -12,22 +12,30 @@ const navItems = [
 
 function MainLayout() {
   const navigate = useNavigate();
+  const [selectedDog, setSelectedDog] = useState(null);
+
   const handleLogout = () => {
-    // 실제 로그아웃 로직 (예: localStorage.removeItem('token');)
-    // 현재는 세션 관리가 없으므로, 단순히 로그인 페이지로 리디렉션
     navigate('/login');
+  };
+
+  const openModal = (dog) => {
+    setSelectedDog(dog);
+  };
+
+  const closeModal = () => {
+    setSelectedDog(null);
   };
 
   return (
     <div className="main-layout">
-      <header className="main-header"> {/* 새 헤더 추가 */}
-        <h1 className="main-header-title">Mungeting 🐾</h1> {/* 앱 이름 또는 로고 */}
+      <header className="main-header">
+        <h1 className="main-header-title">Mungeting 🐾</h1>
         <button onClick={handleLogout} className="logout-button">
           로그아웃
         </button>
       </header>
       <main className="main-content">
-        <Outlet />
+        <Outlet context={{ openModal }} /> {/* openModal 함수를 context로 전달 */}
       </main>
       <nav className="bottom-nav">
         {navItems.map((item) => (
@@ -40,6 +48,8 @@ function MainLayout() {
           </NavLink>
         ))}
       </nav>
+      {/* selectedDog가 있을 때만 ProfileModal을 렌더링 */}
+      {selectedDog && <ProfileModal dog={selectedDog} onClose={closeModal} />}
     </div>
   );
 }
