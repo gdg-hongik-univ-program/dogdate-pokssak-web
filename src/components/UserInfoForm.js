@@ -98,7 +98,7 @@ function UserInfoForm() {
         console.log('API로 전송할 데이터:', apiData); // 데이터 확인용 로그
 
         try {
-            const response = await fetch('http://192.168.0.15:8080/api/users/signup', {
+                        const response = await fetch('http://43.203.234.77:8080/api/users/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(apiData),
