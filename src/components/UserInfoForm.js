@@ -30,7 +30,7 @@ const genderOptions = [
 function UserInfoForm() {
     const [formData, setFormData] = useState({
         nickname: '',
-        userId: '',
+        loginId: '',
         password: '',
         passwordConfirm: '',
         region: '', // 시/도 (영문 value)
@@ -73,7 +73,7 @@ function UserInfoForm() {
         }
 
         if (!formData.nickname) newErrors.nickname = '별명을 입력해주세요.';
-        if (!formData.userId) newErrors.userId = 'ID를 입력해주세요.';
+                if (!formData.loginId) newErrors.loginId = 'ID를 입력해주세요.';
         if (!formData.password) newErrors.password = '비밀번호를 입력해주세요.';
         if (!formData.region) newErrors.region = '사는곳(시/도)을 선택해주세요.';
         if (!formData.district) newErrors.district = '시/군/구를 선택해주세요.';
@@ -86,7 +86,7 @@ function UserInfoForm() {
 
         // API 명세에 맞게 데이터 재구성
         const apiData = {
-            userId: formData.userId, // 'userId' 키에 userId 값 할당
+                        loginId: formData.loginId, // 'loginId' 키에 loginId 값 할당
             nickname: formData.nickname,
             password: formData.password,
             confirmPassword: formData.passwordConfirm,
@@ -131,7 +131,7 @@ function UserInfoForm() {
             <main className="content">
                 <form onSubmit={handleSubmit} className="form-content">
                     <Input label="별명" type="text" name="nickname" value={formData.nickname} onChange={handleChange} required error={errors.nickname} />
-                    <Input label="userId" type="text" name="userId" value={formData.userId} onChange={handleChange} required error={errors.userId} />
+                                        <Input label="loginId" type="text" name="loginId" value={formData.loginId} onChange={handleChange} required error={errors.loginId} />
                     <Input label="PW" type="password" name="password" value={formData.password} onChange={handleChange} required error={errors.password} />
                     <Input label="PW 확인" type="password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} required error={errors.passwordConfirm} />
                     <Select label="사는곳 (시/도)" name="region" value={formData.region} onChange={handleChange} options={regionOptions} error={errors.region} />

@@ -38,11 +38,60 @@ function DogInfoForm() {
     return () => photoPreview && URL.revokeObjectURL(photoPreview);
   }, [photoPreview]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const finalData = { ...userInfo, dogInfo };
-    console.log('최종 회원가입 데이터:', finalData);
-    navigate('/signup-success');
+
+    if (!userInfo || !userInfo.loginId) {
+      alert('사용자 정보가 없습니다. 다시 로그인해주세요.');
+      navigate('/login');
+      return;
+    }
+
+    const formData = new FormData();
+
+    // dogInfo를 JSON 객체로 만들어서 Blob으로 추가
+    const dogInfoJson = {
+      name: dogInfo.name,
+      breed: dogInfo.breed,
+      age: parseInt(dogInfo.age),
+      gender: dogInfo.gender,
+      description: dogInfo.introduction  // 'introduction' -> 'description'
+    };
+
+    formData.append('dogInfo', new Blob([JSON.stringify(dogInfoJson)], {
+      type: 'application/json'
+    }));
+
+    // 이미지 파일명을 'image'로 변경
+    if (dogInfo.photo) {
+      formData.append('image', dogInfo.photo);
+    }
+
+    try {
+      const response = await fetch(`http://43.203.234.77:8080/api/dogs/users/${userInfo.loginId}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        console.log('강아지 정보 저장 성공');
+        navigate('/signup-success');
+      } else {
+        console.error('강아지 정보 저장 실패 - 응답 상태:', response.status, response.statusText);
+        const responseBody = await response.text();
+        console.error('강아지 정보 저장 실패 - 응답 본문:', responseBody);
+        try {
+            const errorData = JSON.parse(responseBody);
+            alert(`강아지 정보 저장 실패: ${errorData.message || '잘못된 요청입니다.'}`);
+            console.error('강아지 정보 저장 실패:', errorData);
+        } catch (e) {
+            alert(`강아지 정보 저장 실패: ${responseBody || '알 수 없는 오류'}`);
+        }
+      }
+    } catch (error) {
+      console.error('강아지 정보 저장 API 호출 오류:', error);
+      alert('강아지 정보 저장 중 문제가 발생했습니다.');
+    }
   };
 
   return (
