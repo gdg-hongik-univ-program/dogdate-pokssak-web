@@ -30,7 +30,7 @@ const genderOptions = [
 function UserInfoForm() {
     const [formData, setFormData] = useState({
         nickname: '',
-        loginId: '',
+        userId: '',
         password: '',
         passwordConfirm: '',
         region: '', // 시/도 (영문 value)
@@ -73,7 +73,7 @@ function UserInfoForm() {
         }
 
         if (!formData.nickname) newErrors.nickname = '별명을 입력해주세요.';
-                if (!formData.loginId) newErrors.loginId = 'ID를 입력해주세요.';
+        if (!formData.userId) newErrors.userId = 'ID를 입력해주세요.';
         if (!formData.password) newErrors.password = '비밀번호를 입력해주세요.';
         if (!formData.region) newErrors.region = '사는곳(시/도)을 선택해주세요.';
         if (!formData.district) newErrors.district = '시/군/구를 선택해주세요.';
@@ -86,8 +86,8 @@ function UserInfoForm() {
 
         // API 명세에 맞게 데이터 재구성
         const apiData = {
-                        loginId: formData.loginId, // 'loginId' 키에 loginId 값 할당
             nickname: formData.nickname,
+            userId: formData.userId, // 'userId' 키에 userId 값 할당
             password: formData.password,
             confirmPassword: formData.passwordConfirm,
             gender: genderOptions.find(opt => opt.value === formData.gender)?.label || '',
@@ -98,19 +98,20 @@ function UserInfoForm() {
         console.log('API로 전송할 데이터:', apiData); // 데이터 확인용 로그
 
         try {
-                        const response = await fetch('http://43.203.234.77:8080/api/users/signup', {
+            const response = await fetch('https://34b9d9448699.ngrok-free.app/api/users/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(apiData),
             });
 
             if (response.ok) {
-                console.log('회원 정보 저장 성공');
+                const responseData = await response.json();
+                console.log('회원 정보 저장 성공:', responseData);
                 // 다음 페이지로 사용자 ID 또는 전체 정보를 전달할 수 있습니다.
-                navigate('/signup-dog', { state: { userInfo: apiData } });
+                navigate('/signup-dog', { state: { userId: responseData.id } });
             } else {
                 const errorData = await response.json().catch(() => ({ message: '알 수 없는 오류' }));
-                alert(`회원가입 실패: ${errorData.message || '잘못된 요청입니다.'}`);
+                alert(`회원가입 실패: ${errorData.message || errorData.userId || '잘못된 요청입니다.'}`);
                 console.error('회원가입 실패:', errorData);
             }
         } catch (error) {
@@ -131,7 +132,7 @@ function UserInfoForm() {
             <main className="content">
                 <form onSubmit={handleSubmit} className="form-content">
                     <Input label="별명" type="text" name="nickname" value={formData.nickname} onChange={handleChange} required error={errors.nickname} />
-                                        <Input label="loginId" type="text" name="loginId" value={formData.loginId} onChange={handleChange} required error={errors.loginId} />
+                    <Input label="userId" type="text" name="userId" value={formData.userId} onChange={handleChange} required error={errors.userId} />
                     <Input label="PW" type="password" name="password" value={formData.password} onChange={handleChange} required error={errors.password} />
                     <Input label="PW 확인" type="password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} required error={errors.passwordConfirm} />
                     <Select label="사는곳 (시/도)" name="region" value={formData.region} onChange={handleChange} options={regionOptions} error={errors.region} />
