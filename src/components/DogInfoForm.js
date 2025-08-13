@@ -16,7 +16,7 @@ function DogInfoForm() {
   const [photoPreview, setPhotoPreview] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const userInfo = location.state?.userInfo;
+  const { userId } = location.state || {};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,7 +41,7 @@ function DogInfoForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!userInfo || !userInfo.loginId) {
+    if (!userId) {
       alert('사용자 정보가 없습니다. 다시 로그인해주세요.');
       navigate('/login');
       return;
@@ -68,7 +68,7 @@ function DogInfoForm() {
     }
 
     try {
-      const response = await fetch(`http://43.203.234.77:8080/api/dogs/users/${userInfo.loginId}`, {
+      const response = await fetch(`https://34b9d9448699.ngrok-free.app/api/dogs/users/${userId}`, {
         method: 'POST',
         body: formData,
       });
