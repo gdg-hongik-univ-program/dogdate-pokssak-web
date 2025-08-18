@@ -20,7 +20,6 @@
   align-items: center;
   justify-content: center; /* Center content vertically */
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb; /* neutral-200 */
 }
 
 .logo-container {
