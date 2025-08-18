@@ -50,7 +50,7 @@
   font-weight: 900;
   color: #111827;
   text-align: center;
-  margin: 1rem 0 113px 0;
+  margin: 1rem 0 2rem 0;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -74,7 +74,7 @@
   padding: 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   border: 1px solid #f3f4f6;
-  margin-top: 112px;
+  margin-top: 1rem;
 }
 
 .form-content {
