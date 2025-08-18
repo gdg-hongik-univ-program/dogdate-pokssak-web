@@ -2,8 +2,12 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
 
+body {
+  background-color: #C4A47C;
+}
+
 .form-layout-container {
-  background-color: #ffffff;
+  background-color: #D2B48C;
   min-height: 97vh;
   display: flex;
   flex-direction: column;
