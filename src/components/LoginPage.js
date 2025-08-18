@@ -28,33 +28,35 @@ function LoginPage() {
         <div className="logo-container">
           <img src="/images/image.png" alt="Logo" className="logo" />
         </div>
-        <h1 className="header-title">로그인</h1>
       </header>
       <main className="content">
-        <form onSubmit={handleSubmit} className="form-content">
-          <Input
-            label="ID"
-            type="text"
-            name="id"
-            value={formData.id}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            label="PW"
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <div className="bottom-action">
-            <button type="submit" className="submit-button">로그인</button>
-          </div>
-        </form>
-        <p className="link-text">
-          계정이 없으신가요? <Link to="/signup-user">회원가입</Link>
-        </p>
+        <div className="login-card">
+          <h1 className="header-title">로그인</h1>
+          <form onSubmit={handleSubmit} className="form-content">
+            <Input
+              label="ID"
+              type="text"
+              name="id"
+              value={formData.id}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              label="PW"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <div className="bottom-action">
+              <button type="submit" className="submit-button">로그인</button>
+            </div>
+          </form>
+          <p className="link-text">
+            계정이 없으신가요? <Link to="/signup-user">회원가입</Link>
+          </p>
+        </div>
       </main>
     </div>
   );
