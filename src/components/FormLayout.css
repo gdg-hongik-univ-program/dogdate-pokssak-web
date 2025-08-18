@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   max-width: 420px; /* 모바일 화면 너비 기준 */
-  margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
+  margin: 20px auto; /* 중앙 정��� 및 상하 여백 */
   border-radius: 12px; /* 둥근 모서리 */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   overflow: hidden; /* 내용이 넘칠 경우 숨김 */
@@ -52,6 +52,14 @@
 .content {
   flex: 1;
   padding: 1.5rem;
+}
+
+.login-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid #f3f4f6;
 }
 
 .form-content {
