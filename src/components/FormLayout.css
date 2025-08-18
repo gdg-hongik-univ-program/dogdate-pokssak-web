@@ -120,10 +120,10 @@
 
 .submit-button {
   width: 100%;
-  background-color: #111827; /* neutral-900 */
+  background-color: #85593A;
   color: #ffffff;
   padding: 0.75rem 1rem;
-  border-radius: 0.5rem; /* rounded-lg */
+  border-radius: 0.5rem;
   border: none;
   cursor: pointer;
 }
