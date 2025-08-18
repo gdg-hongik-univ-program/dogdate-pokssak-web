@@ -49,9 +49,33 @@ function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setMyDog(fakeMyDog);
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+          setError('사용자 ID를 찾을 수 없습니다. 다시 로그인해주세요.');
+          return;
+        }
+
+        // 내 강아지 정보 가져오기
+        const myDogResponse = await fetch(`https://5febe71ba2fa.ngrok-free.app/api/dogs/users/${userId}`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'true'
+          }
+        });
+        if (!myDogResponse.ok) {
+          throw new Error(`내 강아지 정보를 불러오는데 실패했습니다: ${myDogResponse.statusText}`);
+        }
+        const myDogsData = await myDogResponse.json();
+        console.log('My Dogs Data:', myDogsData);
+        if (myDogsData && myDogsData.length > 0) {
+          setMyDog(myDogsData[0]); // 첫 번째 강아지를 내 강아지로 설정
+        } else {
+          setMyDog(null); // 강아지가 없을 경우
+        }
+
+        // 인기 강아지 및 주변 강아지 데이터는 그대로 더미 데이터 사용
         setPopularDogs(fakePopularDogs);
         setNearbyDogs(fakeNearbyDogs);
+
       } catch (err) {
         setError(err.message);
         console.error('Fetch error:', err);
