@@ -1,44 +1,95 @@
 // src/components/ChatPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import io from 'socket.io-client';
 import './ChatPage.css';
 
-
-function ChatPage() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: '안녕하세요!', sender: 'other' },
-    { id: 2, text: '네, 안녕하세요!', sender: 'me' },
-    { id: 3, text: '채팅 기능이 추가되었네요.', sender: 'other' },
-  ]);
+const ChatPage = () => {
+  const { chatroomId } = useParams();
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const socketRef = useRef(null);
+  const userId = localStorage.getItem('userId'); // Get userId from localStorage
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === '') return;
-    const newMessages = [...messages, { id: messages.length + 1, text: newMessage, sender: 'me' }];
-    setMessages(newMessages);
-    setNewMessage('');
+  useEffect(() => {
+    // Fetch chat history
+    const fetchChatHistory = async () => {
+      try {
+        const response = await fetch(`https://54e143bc334e.ngrok-free.app/api/chat/${chatroomId}/history?userId=${userId}`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        });
+        if (response.ok) {
+          const history = await response.json();
+          setMessages(history);
+        } else {
+          console.error('Failed to fetch chat history');
+        }
+      } catch (error) {
+        console.error('Error fetching chat history:', error);
+      }
+    };
+
+    if (chatroomId && userId) {
+      fetchChatHistory();
+    }
+
+    // Connect to WebSocket
+    socketRef.current = io('https://54e143bc334e.ngrok-free.app'); // Replace with your server URL
+
+    socketRef.current.on('connect', () => {
+      console.log('Connected to WebSocket');
+      socketRef.current.emit('joinRoom', { chatroomId });
+    });
+
+    socketRef.current.on('message', (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, [chatroomId, userId]);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (newMessage.trim() && socketRef.current) {
+      const message = {
+        chatroomId,
+        senderId: userId,
+        content: newMessage,
+      };
+      socketRef.current.emit('sendMessage', message);
+      setNewMessage('');
+    }
   };
 
   return (
-    <div className="chat-page">
-        
-        <div className="chat-messages">
-          {messages.map((message) => (
-            <div key={message.id} className={`message ${message.sender}`}>
-              <p>{message.text}</p>
-            </div>
-          ))}
-        </div>
-        <div className="chat-input">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="메시지를 입력하세요..."
-          />
-          <button onClick={handleSendMessage}>전송</button>
-        </div>
+    <div className="chat-page-container">
+      <div className="chat-header">
+        <h2>Chat</h2>
       </div>
+      <div className="chat-messages">
+        {messages.map((msg, index) => (
+          <div key={index} className={`message ${msg.senderId === userId ? 'sent' : 'received'}`}>
+            <div className="message-content">
+              <p>{msg.content}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <form className="chat-input-form" onSubmit={handleSendMessage}>
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type a message..."
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
   );
-}
+};
 
 export default ChatPage;
