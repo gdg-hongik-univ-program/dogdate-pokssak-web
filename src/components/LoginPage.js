@@ -25,6 +25,7 @@ function LoginPage() {
   return (
     <div className="form-layout-container">
       <header className="header">
+        <h1 className="app-title">Mungating</h1>
         <div className="logo-container">
           <img src="/images/image.png" alt="Logo" className="logo" />
         </div>
