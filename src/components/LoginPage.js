@@ -53,6 +53,7 @@ function LoginPage() {
             onChange={handleChange}
             required
             placeholder="Password"
+            icon={<FaPaw />}
           />
             <div className="bottom-action">
               <button type="submit" className="submit-button">로그인</button>
