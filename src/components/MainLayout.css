@@ -18,7 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   background-color: #f9fafb;
   flex-wrap: wrap; /* Allow items to wrap if space is limited */
 }
@@ -88,7 +88,7 @@
   gap: 4px;
   color: #9ca3af; /* neutral-400 */
   font-size: 0.75rem;
-  text-decoration: none; /* NavLink가 a 태그로 렌���링되므로 밑줄 제거 */
+  text-decoration: none; /* NavLink가 a 태그로 렌더링되므로 밑줄 제거 */
 }
 
 .nav-item i {
