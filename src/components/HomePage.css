@@ -7,7 +7,7 @@
     overflow-y: auto;
 }
 
-/* ��� 강아지 섹션 */
+/* 내 강아지 섹션 */
 .my-dog-header-row {
   display: flex;
   align-items: center;
@@ -29,6 +29,16 @@
 
 .center-title {
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.trophy-icon {
+  color: #FFD700;
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
 }
 
 .settings-button {
@@ -91,7 +101,7 @@
 
 .dog-list {
     display: flex;
-    gap: 1rem; /* 카드 사이 간격 */
+    gap: 1rem; /* 카드 사�� 간격 */
     padding: 0 1rem; /* Add horizontal padding to the list itself */
 }
 

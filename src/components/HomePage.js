@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom'; // useOutletContext 임포�
 import './HomePage.css';
 import DogProfileCard from './DogprofileCard';
 import { FiSettings } from "react-icons/fi";
+import { FaTrophy } from "react-icons/fa";
 
 // API 호출을 위한 가짜 데이터
 const fakeMyDog = {
@@ -30,7 +31,7 @@ const fakeNearbyDogs = [
   { id: 7, name: '두부', breed: '프렌치 불독', age: 2, gender: '여아', city: '서울', district: '성동구', bio: '먹는 것과 자는 것을 가장 좋아하는 순둥이 두부.', imageUrl: 'https://images.unsplash.com/photo-1597633425046-08f5110420b5?q=80&w=800', distance: '2km' },
   { id: 8, name: '콩이', breed: '퍼그', age: 3, gender: '여아', city: '서울', district: '광진구', bio: '주름진 얼굴이 매력적인 콩이에요. 느긋한 산책을 즐겨요.', imageUrl: 'https://images.unsplash.com/photo-1534351450181-ea6f7d45e388?q=80&w=800', distance: '3km' },
   { id: 9, name: '별이', breed: '치와와', age: 4, gender: '여아', city: '서울', district: '강동구', bio: '작은 몸집에 큰 용기를 가졌어요. 주인 껌딱지랍니다.', imageUrl: 'https://images.unsplash.com/photo-1601979031425-12f4a45978c6?q=80&w=800', distance: '4km' },
-  { id: 10, name: '밤비', breed: '푸들', age: 5, gender: '남아', city: '서울', district: '송파구', bio: '똑똑하고 훈련을 잘 받아요. 새로운 개인기를 배우고 싶어요!', imageUrl: 'https://images.unsplash.com/photo-1585679104874-83d49a905a8e?q=80&w=800', distance: '5km' },
+  { id: 10, name: '밤비', breed: '푸들', age: 5, gender: '남아', city: '서울', district: '송파구', bio: '똑똑하고 훈련을 잘 받아요. 새로운 개인기를 배우고 ��어요!', imageUrl: 'https://images.unsplash.com/photo-1585679104874-83d49a905a8e?q=80&w=800', distance: '5km' },
 ];
 
 function HomePage() {
@@ -88,7 +89,10 @@ function HomePage() {
         </div>
       </section>
       <div className="hall-of-fame-section">
-        <h2 className="section-title center-title">명예의 전당</h2>
+        <h2 className="section-title center-title">
+          <FaTrophy className="trophy-icon" />
+          명예의 전당
+        </h2>
       </div>
 
       <section className="hall-of-fame-section">
