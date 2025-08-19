@@ -35,22 +35,22 @@ function LoginPage() {
           <h1 className="header-title">로그인</h1>
           <form onSubmit={handleSubmit} className="form-content">
             <Input
-            label="ID"
+            label="아이디"
             type="text"
             name="id"
             value={formData.id}
             onChange={handleChange}
             required
-            placeholder="ID"
+            placeholder="아이디"
           />
-            <Input
-            label="PW"
+          <Input
+            label="비밀번호"
             type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
-            placeholder="PW"
+            placeholder="비밀번호"
           />
             <div className="bottom-action">
               <button type="submit" className="submit-button">로그인</button>
