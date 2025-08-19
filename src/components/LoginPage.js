@@ -1,6 +1,7 @@
 // src/components/LoginPage.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaPaw } from 'react-icons/fa';
 import Input from './Input';
 import './FormLayout.css'; // Revert to original CSS file
 
@@ -42,6 +43,7 @@ function LoginPage() {
             onChange={handleChange}
             required
             placeholder="ID"
+            icon={<FaPaw />}
           />
           <Input
             label="비밀번호"
@@ -57,7 +59,7 @@ function LoginPage() {
             </div>
           </form>
           <p className="link-text">
-            계정이 없으신가요? <Link to="/signup-user">회��가입</Link>
+            계정이 없으신가요? <Link to="/signup-user">회원가입</Link>
           </p>
         </div>
       </main>
