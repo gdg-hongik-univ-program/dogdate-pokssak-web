@@ -41,7 +41,7 @@ function LoginPage() {
             value={formData.id}
             onChange={handleChange}
             required
-            placeholder="아이디"
+            placeholder="ID"
           />
           <Input
             label="비밀번호"
@@ -50,14 +50,14 @@ function LoginPage() {
             value={formData.password}
             onChange={handleChange}
             required
-            placeholder="비밀번호"
+            placeholder="Password"
           />
             <div className="bottom-action">
               <button type="submit" className="submit-button">로그인</button>
             </div>
           </form>
           <p className="link-text">
-            계정이 없으신가요? <Link to="/signup-user">회원가입</Link>
+            계정이 없으신가요? <Link to="/signup-user">회��가입</Link>
           </p>
         </div>
       </main>
