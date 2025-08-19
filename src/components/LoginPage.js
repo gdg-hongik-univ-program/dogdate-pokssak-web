@@ -35,13 +35,14 @@ function LoginPage() {
           <h1 className="header-title">로그인</h1>
           <form onSubmit={handleSubmit} className="form-content">
             <Input
-              label="ID"
-              type="text"
-              name="id"
-              value={formData.id}
-              onChange={handleChange}
-              required
-            />
+            label="ID"
+            type="text"
+            name="id"
+            value={formData.id}
+            onChange={handleChange}
+            required
+            placeholder="ID"
+          />
             <Input
               label="PW"
               type="password"
