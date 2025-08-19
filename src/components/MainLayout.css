@@ -25,9 +25,9 @@
 
 .main-header-title { /* 헤더 타이틀 스타일 */
   font-family: 'Inter', 'Noto Sans KR', sans-serif;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  color: #85593A;
+  color: #000000;
   text-align: center;
   letter-spacing: -0.03em;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
