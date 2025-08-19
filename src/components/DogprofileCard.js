@@ -13,7 +13,7 @@ const DogProfileCard = ({ dog, onClick }) => {
     <div className="dog-profile-card-horizontal" onClick={onClick}>
       <div className="dog-profile-image-container-horizontal">
         <img 
-          src={dog.imageUrl}
+          src={dog.photoUrl || dog.imageUrl}
           alt={dog.name}
           className="dog-profile-image-horizontal"
         />

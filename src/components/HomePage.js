@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom'; // useNavigate 임포트
 import './HomePage.css';
+import { BASE_URL } from '../config';
 import DogProfileCard from './DogprofileCard';
 import { FiSettings } from "react-icons/fi";
 
@@ -33,7 +34,7 @@ function HomePage() {
         }
 
         // 내 강아지 정보 가져오기
-        const myDogResponse = await fetch(` https://e45d0de5c141.ngrok-free.app/api/dogs/users/${userId}`, {
+        const myDogResponse = await fetch(` ${BASE_URL}/api/dogs/users/${userId}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true'
           }
@@ -125,7 +126,7 @@ function HomePage() {
           <div className="dog-list">
             {nearbyDogs.map(dog => (
               <div key={dog.id} className="dog-card" onClick={() => openModal(dog)}>
-                <img src={dog.imageUrl} alt={dog.name} className="dog-card-background-image" />
+                <img src={dog.photoUrl || dog.imageUrl} alt={dog.name} className="dog-card-background-image" />
                 <div className="dog-card-content">
                   <h3 className="dog-name">{dog.name}</h3>
                   <p className="dog-details">{dog.breed} / {dog.age}살</p>
@@ -143,7 +144,7 @@ function HomePage() {
           <div className="dog-list">
             {popularDogs.map(dog => (
               <div key={dog.id} className="dog-card" onClick={() => openModal(dog)}>
-                <img src={dog.imageUrl} alt={dog.name} className="dog-card-background-image" />
+                <img src={dog.photoUrl || dog.imageUrl} alt={dog.name} className="dog-card-background-image" />
                 <div className="dog-card-content">
                   <h3 className="dog-name">{dog.name}</h3>
                   <p className="dog-details">{dog.breed} / {dog.age}살</p>

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 import './ChatPage.css';
+import { BASE_URL } from '../config';
 
 const ChatPage = () => {
   const { chatroomId } = useParams();
@@ -12,34 +13,49 @@ const ChatPage = () => {
   const stompClientRef = useRef(null);
   const userId = localStorage.getItem('userId'); // Get userId from localStorage
 
-  // Fetch chat history on component mount
+  // Fetch chat history and mark messages as read on component mount
   useEffect(() => {
-    const fetchChatHistory = async () => {
+    const fetchChatHistoryAndMarkRead = async () => {
       try {
-        const response = await fetch(`https://e45d0de5c141.ngrok-free.app/api/chat/${chatroomId}/history?userId=${userId}`, {
+        // Fetch chat history
+        const historyResponse = await fetch(`${BASE_URL}/api/chat/${chatroomId}/history?userId=${userId}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true',
           },
         });
-        if (response.ok) {
-          const history = await response.json();
+        if (historyResponse.ok) {
+          const history = await historyResponse.json();
           setMessages(history);
         } else {
           console.error('Failed to fetch chat history');
         }
+
+        // Mark messages as read
+        const readResponse = await fetch(`${BASE_URL}/api/chat/${chatroomId}/read?userId=${userId}`, {
+          method: 'PUT',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        });
+        if (readResponse.ok) {
+          console.log('Messages marked as read');
+        } else {
+          console.error('Failed to mark messages as read');
+        }
+
       } catch (error) {
-        console.error('Error fetching chat history:', error);
+        console.error('Error fetching chat history or marking messages as read:', error);
       }
     };
 
     if (chatroomId && userId) {
-      fetchChatHistory();
+      fetchChatHistoryAndMarkRead();
     }
   }, [chatroomId, userId]);
 
   // WebSocket (STOMP) connection and subscription
   useEffect(() => {
-    const socket = new SockJS('https://e45d0de5c141.ngrok-free.app/ws-stomp');
+    const socket = new SockJS(`${BASE_URL}/ws-stomp`);
     const stompClient = Stomp.over(socket);
     stompClientRef.current = stompClient;
 

@@ -33,7 +33,6 @@
 - **지역별 강아지 TOP 3**: `GET /api/home/regional-dogs/{city}?limit=3`
 - **전체 강아지 랭킹**: `GET /api/home/dog-ranking?page=0&size=10`
 - **특정 사용자 상세 정보**: `GET /api/home/user/{userId}`
-
 ## 실시간 채팅
 - **채팅 기록 조회**: `GET /api/chat/{chatroomId}/history?userId={userId}`
 - **읽지 않은 메세지 수 조회**: `GET /api/chat/{chatroomId}/unread-count?userId={userId}`

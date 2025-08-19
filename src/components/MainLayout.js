@@ -7,7 +7,7 @@ const navItems = [
   { path: '/app/home', icon: 'fa-solid fa-house', label: '홈' },
   { path: '/app/likes', icon: 'fa-solid fa-heart', label: '하트' },
   { path: '/app/match', icon: 'fa-solid fa-compass', label: '매치' },
-  { path: '/app/chat', icon: 'fa-solid fa-comment', label: '채팅' },
+  { path: '/app/chat-list', icon: 'fa-solid fa-comment', label: '채팅' },
 ];
 
 function MainLayout() {

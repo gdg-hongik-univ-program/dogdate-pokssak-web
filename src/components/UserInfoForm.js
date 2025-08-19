@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Input from './Input';
 import Select from './Select';
 import './FormLayout.css';
+import { BASE_URL } from '../config';
 
 const koreanRegions = {
     seoul: { label: '서울', districts: ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'] },
@@ -98,7 +99,7 @@ function UserInfoForm() {
         console.log('API로 전송할 데이터:', apiData); // 데이터 확인용 로그
 
         try {
-            const response = await fetch('https://e45d0de5c141.ngrok-free.app/api/users/signup', {
+            const response = await fetch(` ${BASE_URL}/api/users/signup`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',

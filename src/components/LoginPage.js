@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from './Input';
 import './FormLayout.css'; // Revert to original CSS file
+import { BASE_URL } from '../config';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch(' https://e45d0de5c141.ngrok-free.app/api/users/login', {
+      const response = await fetch(` ${BASE_URL}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
