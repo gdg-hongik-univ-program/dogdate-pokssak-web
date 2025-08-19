@@ -11,9 +11,10 @@
 .my-dog-header-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .section-title {
@@ -35,6 +36,8 @@
   width: 2.4rem;
   border-radius: 50%;
   transition: background 0.2s;
+  position: absolute;
+  right: 0;
 }
 
 .settings-button:hover {
