@@ -36,3 +36,42 @@
   flex-direction: column;
   gap: 1rem; /* 카드 사이의 간격 */
 }
+
+.match-request-item {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  margin-bottom: 1rem; /* Add margin between items */
+}
+
+.match-request-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.match-request-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.match-request-actions button:first-child {
+  background-color: #4CAF50; /* Accept button color */
+  color: white;
+}
+
+.match-request-actions button:last-child {
+  background-color: #f44336; /* Reject button color */
+  color: white;
+}
+
+.blurred-buttons {
+  filter: blur(2px); /* Apply blur effect */
+  pointer-events: none; /* Disable clicks */
+}

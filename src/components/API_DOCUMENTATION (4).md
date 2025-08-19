@@ -206,10 +206,12 @@ Content-Type: application/json
   "user2Id": 2,
   "user1Nickname": "사용자1",
   "user2Nickname": "사용자2",
-  "status": "ACTIVE",
+  "status": "MATCHED",
   "createdAt": "2025-01-28T10:00:00"
 }
 ```
+
+**참고**: 매칭 성공 시 채팅방이 자동으로 생성되며, 매치 상태가 "MATCHED"로 설정됩니다.
 
 **응답 (매칭 실패시)**
 ```http
@@ -217,6 +219,14 @@ HTTP/1.1 200 OK
 Content-Type: text/plain
 
 스와이프가 완료되었습니다.
+```
+
+**응답 (중복 스와이프시)**
+```http
+HTTP/1.1 400 Bad Request
+Content-Type: text/plain
+
+이미 스와이프한 사용자입니다.
 ```
 
 ### 좋아요 토글
@@ -284,6 +294,50 @@ GET /api/matches/users/{userId}/active
 ### 매칭 상태 변경
 ```http
 PUT /api/matches/{matchId}/status?status=INACTIVE
+```
+
+### 보낸 매치 요청 조회
+```http
+GET /api/matches/requests/sent/{userId}
+```
+
+**설명**: 사용자가 보낸 대기 중인 매치 요청만 조회 (ACTIVE 상태만 반환)
+
+**응답**
+```json
+[
+  {
+    "id": 1,
+    "user1Id": 1,
+    "user2Id": 2,
+    "user1Nickname": "사용자1",
+    "user2Nickname": "사용자2",
+    "status": "ACTIVE",
+    "createdAt": "2025-01-28T10:00:00"
+  }
+]
+```
+
+### 받은 매치 요청 조회
+```http
+GET /api/matches/requests/received/{userId}
+```
+
+**설명**: 사용자가 받은 대기 중인 매치 요청만 조회 (ACTIVE 상태만 반환)
+
+**응답**
+```json
+[
+  {
+    "id": 1,
+    "user1Id": 2,
+    "user2Id": 1,
+    "user1Nickname": "사용자2",
+    "user2Nickname": "사용자1",
+    "status": "ACTIVE",
+    "createdAt": "2025-01-28T10:00:00"
+  }
+]
 ```
 
 ---
@@ -393,6 +447,198 @@ GET /api/home/user/{userId}
 
 ---
 
+## 💬 실시간 채팅 API (WebSocket STOMP)
+
+### WebSocket 연결
+```javascript
+// 연결 설정
+const socket = new SockJS('http://localhost:8080/ws-stomp');
+const stompClient = Stomp.over(socket);
+
+// 연결
+stompClient.connect({}, function(frame) {
+    console.log('Connected: ' + frame);
+});
+```
+
+### 채팅방 구독
+```javascript
+// 특정 채팅방 구독
+stompClient.subscribe('/sub/chat/room/{chatroomId}', function(message) {
+    const chatMessage = JSON.parse(message.body);
+    // 메시지 처리 로직
+});
+```
+
+### 메시지 전송
+```javascript
+// 일반 채팅 메시지 전송
+stompClient.send('/pub/chat/message', {}, JSON.stringify({
+    chatroomId: 1,
+    senderId: 123,
+    content: '안녕하세요!',
+    type: 'CHAT'
+}));
+
+// 채팅방 입장 알림
+stompClient.send('/pub/chat/enter', {}, JSON.stringify({
+    chatroomId: 1,
+    senderId: 123,
+    type: 'ENTER'
+}));
+
+// 채팅방 퇴장 알림
+stompClient.send('/pub/chat/leave', {}, JSON.stringify({
+    chatroomId: 1,
+    senderId: 123,
+    type: 'LEAVE'
+}));
+```
+
+### 메시지 형식
+
+**전송 메시지 (Client → Server)**
+```json
+{
+  "chatroomId": 1,
+  "senderId": 123,
+  "content": "안녕하세요!",
+  "type": "CHAT"
+}
+```
+
+**수신 메시지 (Server → Client)**
+```json
+{
+  "chatroomId": 1,
+  "senderId": 123,
+  "content": "안녕하세요!",
+  "type": "CHAT",
+  "senderNickname": "테스트유저",
+  "timestamp": "2025-08-01T10:30:00",
+  "isRead": false
+}
+```
+
+### 메시지 타입
+- `CHAT`: 일반 채팅 메시지
+- `ENTER`: 채팅방 입장 알림
+- `LEAVE`: 채팅방 퇴장 알림
+
+### WebSocket 엔드포인트
+- **연결 엔드포인트**: `/ws-stomp`
+- **구독 경로**: `/sub/chat/room/{chatroomId}`
+- **발행 경로**: 
+  - `/pub/chat/message` - 일반 메시지
+  - `/pub/chat/enter` - 입장 알림
+  - `/pub/chat/leave` - 퇴장 알림
+
+### 채팅 REST API
+
+#### 채팅 기록 조회
+```http
+GET /api/chat/{chatroomId}/history?userId={userId}
+```
+
+**응답**
+```json
+[
+  {
+    "id": 1,
+    "chatroomId": 1,
+    "senderId": 123,
+    "senderNickname": "테스트유저",
+    "content": "안녕하세요!",
+    "sentAt": "2025-08-01T10:30:00",
+    "read": false
+  }
+]
+```
+
+#### 읽지 않은 메시지 수 조회
+```http
+GET /api/chat/{chatroomId}/unread-count?userId={userId}
+```
+
+**응답**
+```json
+{
+  "unreadCount": 5
+}
+```
+
+#### 메시지 읽음 처리
+```http
+PUT /api/chat/{chatroomId}/read?userId={userId}
+```
+
+**응답**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/plain
+
+메시지를 읽음 처리했습니다.
+```
+
+#### 매치 기반 채팅방 조회
+```http
+GET /api/chat/room/match/{matchId}
+```
+
+**응답**
+```json
+{
+  "id": 1,
+  "matchId": 1,
+  "createdAt": "2025-08-01T10:00:00"
+}
+```
+
+#### 사용자 채팅방 목록 조회
+```http
+GET /api/chat/users/{userId}/chatrooms
+```
+
+**응답**
+```json
+[
+  {
+    "id": 1,
+    "matchId": 1,
+    "createdAt": "2025-08-01T10:00:00"
+  },
+  {
+    "id": 2,
+    "matchId": 2,
+    "createdAt": "2025-08-01T11:00:00"
+  }
+]
+```
+
+### 채팅 사용 시나리오
+
+1. **WebSocket 연결 및 채팅방 구독**
+   ```javascript
+   stompClient.subscribe('/sub/chat/room/1', handleMessage);
+   ```
+
+2. **실시간 메시지 전송**
+   ```javascript
+   stompClient.send('/pub/chat/message', {}, JSON.stringify(message));
+   ```
+
+3. **채팅 기록 조회**
+   ```http
+   GET /api/chat/1/history?userId=123
+   ```
+
+4. **읽음 처리**
+   ```http
+   PUT /api/chat/1/read?userId=123
+   ```
+
+---
+
 ## 🌍 지역 관리 API (`/api/regions`)
 
 ### 모든 시/도 목록
@@ -477,8 +723,9 @@ GET /api/regions/all
 - `FEMALE`: 여성
 
 ### Match Status
-- `ACTIVE`: 활성 매칭
-- `INACTIVE`: 비활성 매칭
+- `ACTIVE`: 대기 중인 매치 요청
+- `MATCHED`: 매칭 완료 (채팅방 생성됨)
+- `INACTIVE`: 거절/취소된 매치
 
 ### 페이징 파라미터
 - `page`: 페이지 번호 (0부터 시작, 기본값: 0)
@@ -487,11 +734,17 @@ GET /api/regions/all
 ---
 
 ## 💡 사용 팁
+
 1. **인증**: 현재 버전에서는 별도 인증 토큰이 필요하지 않습니다.
 2. **이미지 업로드**: S3 연동 기능은 현재 비활성화되어 있습니다.
 3. **페이징**: 랭킹 API들은 페이징을 지원합니다.
 4. **지역 필터링**: 매칭은 같은 지역(시/구) 내에서만 이루어집니다.
 5. **좋아요 시스템**: 스와이프와 독립적으로 좋아요 기능을 사용할 수 있습니다.
+6. **채팅방 생성**: 채팅방은 상호 스와이프 시 자동으로 생성됩니다.
+7. **중복 스와이프**: 이미 스와이프한 사용자에게 재스와이프 시 400 에러가 반환됩니다.
+8. **매치 요청 조회**: 내가 보낸/받은 대기 중인 매치 요청만 조회됩니다.
+9. **매칭 완료**: 상호 스와이프 시 매치 상태가 MATCHED로 변경되어 요청 목록에서 제거됩니다.
+10. **채팅방 목록**: 사용자가 참여 중인 모든 채팅방을 조회할 수 있습니다.
 
 ---
 

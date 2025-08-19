@@ -36,6 +36,8 @@
   flex-direction: column;
   justify-content: center;
   flex-grow: 1;
+  max-height: 100px; /* Adjust as needed */
+  overflow-y: auto; /* Add scroll if content exceeds max-height */
 }
 
 .dog-profile-header {

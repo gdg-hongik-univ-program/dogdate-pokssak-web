@@ -33,8 +33,20 @@ function MatchPage() {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setCharacters(data); // API에서 받아온 데이터로 설정
+          const users = await response.json();
+          const usersWithDogs = await Promise.all(users.map(async (user) => {
+            const dogResponse = await fetch(`${BASE_URL}/api/dogs/users/${user.id}`, {
+              headers: { 'ngrok-skip-browser-warning': 'true' },
+            });
+            if (dogResponse.ok) {
+              const dogs = await dogResponse.json();
+              return { ...user, dog: dogs[0] }; // Assuming each user has at least one dog and we take the first one
+            } else {
+              console.error(`Failed to fetch dog for user ${user.id}`);
+              return { ...user, dog: null };
+            }
+          }));
+          setCharacters(usersWithDogs); // API에서 받아온 데이터로 설정
         } else {
           const errorText = await response.text();
           throw new Error(`매치 데이터 불러오기 실패: ${response.status} ${response.statusText} - ${errorText}`);
@@ -94,31 +106,81 @@ function MatchPage() {
   const handleMatchClick = async () => {
     if (characters.length === 0) return; // 캐릭터가 없으면 아무것도 하지 않음
 
-    const currentMatchId = characters[currentIndex].id; // 현재 카드의 ID를 matchId로 사용
+    const character = characters[currentIndex];
     const userId = localStorage.getItem('userId'); // 로컬 스토리지에서 userId 가져오기
 
+    if (!userId) {
+      alert('사용자 ID를 찾을 수 없습니다. 로그인해주세요.');
+      navigate('/login');
+      return;
+    }
+
     try {
-      // 매치 기반 채팅방 생성 시도 (매치 신청으로 간주)
-      const response = await fetch(`${BASE_URL}/api/chat/room/match/${currentMatchId}`, {
+      const swipeResponse = await fetch(`${BASE_URL}/api/swipes/users/${userId}`, {
         method: 'POST',
         headers: {
           'ngrok-skip-browser-warning': 'true',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: userId }) // userId를 body에 포함 (API 명세에 따라)
+        body: JSON.stringify({ toUserId: character.id }),
       });
 
-      if (response.ok) {
-        console.log('매치 신청 및 채팅방 생성 성공');
-        alert('매치 신청이 완료되었습니다.');
-      } else {
-        const errorText = await response.text();
-        throw new Error(`매치 신청 실패: ${response.status} ${response.statusText} - ${errorText}`);
-      }
+      if (swipeResponse.ok) {
+        const swipeResultText = await swipeResponse.text();
+        
+        try {
+          const swipeResult = JSON.parse(swipeResultText);
+          // If a match object is returned, it means a successful match
+          if (swipeResult && swipeResult.id) { // Assuming swipeResult.id is the matchId
+            const matchId = swipeResult.id;
+            console.log('매치 성공! 매치 ID:', matchId);
 
+            // Get the chatroom ID based on the matchId
+            const chatroomResponse = await fetch(`${BASE_URL}/api/chat/room/match/${matchId}`, {
+              headers: {
+                'ngrok-skip-browser-warning': 'true',
+              },
+            });
+
+            if (chatroomResponse.ok) {
+              const chatroomData = await chatroomResponse.json();
+              if (chatroomData && chatroomData.id) {
+                navigate(`/app/chat/${chatroomData.id}`);
+              } else {
+                alert('채팅방 정보를 가져오는 데 실패했습니다.');
+              }
+            } else {
+              const errorText = await chatroomResponse.text();
+              throw new Error(`채팅방 조회 실패: ${chatroomResponse.status} ${chatroomResponse.statusText} - ${errorText}`);
+            }
+          } else {
+            // No match object returned, meaning swipe completed but no immediate match
+            console.log('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
+            alert('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
+          }
+        } catch (jsonError) {
+          // If response is not JSON, it's likely "스와이프가 완료되었습니다."
+          if (swipeResultText.includes('스와이프가 완료되었습니다.')) {
+            console.log('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
+            alert('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
+          } else {
+            throw new Error(`스와이프 응답 파싱 오류: ${jsonError.message} - ${swipeResultText}`);
+          }
+        }
+      } else if (swipeResponse.status === 400) {
+        const errorText = await swipeResponse.text();
+        if (errorText.includes('이미 스와이프한 사용자입니다.')) {
+          alert('이미 매치 신청을 보냈거나 매칭된 상대입니다.');
+        } else {
+          throw new Error(`스와이프 실패: ${swipeResponse.status} ${swipeResponse.statusText} - ${errorText}`);
+        }
+      } else {
+        const errorText = await swipeResponse.text();
+        throw new Error(`스와이프 실패: ${swipeResponse.status} ${swipeResponse.statusText} - ${errorText}`);
+      }
     } catch (error) {
-      console.error('매치 신청 처리 중 오류 발생:', error);
-      alert(`매치 신청 처리 중 오류 발생: ${error.message}`);
+      console.error('매치 처리 중 오류 발생:', error);
+      alert(`매치 처리 중 오류 발생: ${error.message}`);
     }
   };
 
@@ -147,7 +209,7 @@ function MatchPage() {
       <div className='card-container'>
         {currentCard ? (
           <div className="match-page-card-wrapper" onClick={() => openModal(currentCard)}>
-            <DogProfileCard dog={currentCard} />
+            <DogProfileCard dog={currentCard.dog} />
           </div>
         ) : (
           <div className="no-more-cards">더 이상 카드가 없습니다.</div>
