@@ -44,13 +44,14 @@ function LoginPage() {
             placeholder="ID"
           />
             <Input
-              label="PW"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            label="PW"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            placeholder="PW"
+          />
             <div className="bottom-action">
               <button type="submit" className="submit-button">로그인</button>
             </div>
