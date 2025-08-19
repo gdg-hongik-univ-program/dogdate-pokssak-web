@@ -31,7 +31,10 @@ function MainLayout() {
     <div className="main-layout">
       <header className="main-header">
         <h1 className="main-header-title">Mungeting</h1>
-        <FaPaw className="header-paw-icon" />
+        <button onClick={handleLogout} className="stylish-logout-button">
+          <FaPaw className="logout-paw-icon" />
+          <span className="logout-text">로그아웃</span>
+        </button>
       </header>
       <main className="main-content">
         <Outlet context={{ openModal }} /> {/* openModal 함수를 context로 전달 */}
