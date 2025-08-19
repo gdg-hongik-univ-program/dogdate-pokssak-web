@@ -27,6 +27,10 @@
   letter-spacing: -0.02em;
 }
 
+.center-title {
+  text-align: center;
+}
+
 .settings-button {
   background: #e0e0e0;
   border: none;

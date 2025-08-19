@@ -88,7 +88,7 @@ function HomePage() {
         </div>
       </section>
       <div className="hall-of-fame-section">
-        <h2 className="section-title">멍에의 전당</h2>
+        <h2 className="section-title center-title">명예의 전당</h2>
       </div>
 
       <section className="hall-of-fame-section">
