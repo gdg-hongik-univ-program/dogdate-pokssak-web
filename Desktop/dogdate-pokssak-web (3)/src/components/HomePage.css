@@ -1,0 +1,174 @@
+/* src/components/HomePage.css */
+.home-container {
+    padding: 1rem;
+    background-color: #f9fafb;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* 내 강아지 섹션 */
+.my-dog-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.section-title {
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.center-title {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.trophy-icon {
+  color: #FFD700;
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
+}
+
+.settings-button {
+  background: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  padding: 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.4rem;
+  width: 2.4rem;
+  border-radius: 50%;
+  transition: background 0.2s;
+  position: absolute;
+  right: 0;
+}
+
+.settings-button:hover {
+  background: #bdbdbd;
+}
+
+/* 명예의 전당 섹션 공통 스타일 */
+.hall-of-fame-section {
+    margin-top: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.my-dog-profile-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 0 1rem; /* 좌우 여백 추가 */
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+.my-dog-profile-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.my-dog-profile-wrapper .dog-profile-card {
+    width: 100%;
+}
+
+.dog-list-scroll-container {
+    overflow-x: scroll; /* 가로 스크롤 */
+    -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드럽게 */
+    padding: 0.5rem 0 1rem 0; /* Add some padding for aesthetics */
+}
+
+/* 스크롤바 숨기기 (선택 사항) */
+.dog-list-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.dog-list-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.dog-list {
+    display: flex;
+    gap: 1rem; /* 카드 사�� 간격 */
+    padding: 0 1rem; /* Add horizontal padding to the list itself */
+}
+
+.dog-card {
+  position: relative; /* For positioning children */
+  flex: 0 0 150px; /* 각 카드의 너비를 150px로 고정 */
+  width: 150px;
+  aspect-ratio: 1 / 1.25; /* 세로가 약간 긴 카드 비율 */
+  background-color: #f0f0f0; /* Fallback color */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.dog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.dog-card-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.dog-card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Push content to the bottom */
+  padding: 0.75rem;
+  box-sizing: border-box;
+  /* Gradient for text readability */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 20%, transparent 80%);
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.dog-card .dog-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dog-card .dog-details {
+  font-size: 0.75rem;
+  color: #e0e0e0;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.dog-card .dog-extra-info {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 0.25rem;
+}
