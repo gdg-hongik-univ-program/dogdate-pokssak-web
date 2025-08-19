@@ -68,8 +68,11 @@ function DogInfoForm() {
     }
 
     try {
-      const response = await fetch(`https://54e143bc334e.ngrok-free.app/api/dogs/users/${userId}`, {
+      const response = await fetch(`https://e45d0de5c141.ngrok-free.app/api/dogs/users/${userId}`, {
         method: 'POST',
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        },
         body: formData,
       });
 

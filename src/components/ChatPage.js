@@ -1,21 +1,22 @@
 // src/components/ChatPage.js
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import io from 'socket.io-client';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 import './ChatPage.css';
 
 const ChatPage = () => {
   const { chatroomId } = useParams();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const socketRef = useRef(null);
+  const stompClientRef = useRef(null);
   const userId = localStorage.getItem('userId'); // Get userId from localStorage
 
+  // Fetch chat history on component mount
   useEffect(() => {
-    // Fetch chat history
     const fetchChatHistory = async () => {
       try {
-        const response = await fetch(`https://54e143bc334e.ngrok-free.app/api/chat/${chatroomId}/history?userId=${userId}`, {
+        const response = await fetch(`https://e45d0de5c141.ngrok-free.app/api/chat/${chatroomId}/history?userId=${userId}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true',
           },
@@ -34,33 +35,47 @@ const ChatPage = () => {
     if (chatroomId && userId) {
       fetchChatHistory();
     }
+  }, [chatroomId, userId]);
 
-    // Connect to WebSocket
-    socketRef.current = io('https://54e143bc334e.ngrok-free.app'); // Replace with your server URL
+  // WebSocket (STOMP) connection and subscription
+  useEffect(() => {
+    const socket = new SockJS('https://e45d0de5c141.ngrok-free.app/ws-stomp');
+    const stompClient = Stomp.over(socket);
+    stompClientRef.current = stompClient;
 
-    socketRef.current.on('connect', () => {
-      console.log('Connected to WebSocket');
-      socketRef.current.emit('joinRoom', { chatroomId });
+    stompClient.connect({}, (frame) => {
+      console.log('Connected: ' + frame);
+
+      // Subscribe to the chat room
+      stompClient.subscribe(`/sub/chat/room/${chatroomId}`, (message) => {
+        const chatMessage = JSON.parse(message.body);
+        setMessages((prevMessages) => [...prevMessages, chatMessage]);
+      });
+
+    }, (error) => {
+      console.error('STOMP Error:', error);
     });
 
-    socketRef.current.on('message', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-
+    // Disconnect on component unmount
     return () => {
-      socketRef.current.disconnect();
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.disconnect(() => {
+          console.log('Disconnected');
+        });
+      }
     };
   }, [chatroomId, userId]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (newMessage.trim() && socketRef.current) {
+    if (newMessage.trim() && stompClientRef.current && stompClientRef.current.connected) {
       const message = {
-        chatroomId,
-        senderId: userId,
+        chatroomId: parseInt(chatroomId),
+        senderId: parseInt(userId),
         content: newMessage,
+        type: 'CHAT'
       };
-      socketRef.current.emit('sendMessage', message);
+      stompClientRef.current.send('/pub/chat/message', {}, JSON.stringify(message));
       setNewMessage('');
     }
   };
@@ -68,13 +83,13 @@ const ChatPage = () => {
   return (
     <div className="chat-page-container">
       <div className="chat-header">
-        <h2>Chat</h2>
+        <h2>Chat Room {chatroomId}</h2>
       </div>
       <div className="chat-messages">
         {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.senderId === userId ? 'sent' : 'received'}`}>
+          <div key={index} className={`message ${msg.senderId === parseInt(userId) ? 'sent' : 'received'}`}>
             <div className="message-content">
-              <p>{msg.content}</p>
+              <p>{msg.senderNickname}: {msg.content}</p>
             </div>
           </div>
         ))}

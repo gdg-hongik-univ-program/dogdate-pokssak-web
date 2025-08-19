@@ -98,9 +98,12 @@ function UserInfoForm() {
         console.log('API로 전송할 데이터:', apiData); // 데이터 확인용 로그
 
         try {
-            const response = await fetch('https://54e143bc334e.ngrok-free.app/api/users/signup', {
+            const response = await fetch('https://e45d0de5c141.ngrok-free.app/api/users/signup', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
+                },
                 body: JSON.stringify(apiData),
             });
 
