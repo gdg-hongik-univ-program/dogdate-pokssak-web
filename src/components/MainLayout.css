@@ -28,7 +28,12 @@
   font-size: 1.5rem; /* 24px */
   font-weight: 700; /* Bold */
   color: #111827;
-  letter-spacing: -0.5px; /* 자간을 살짝 좁혀서 더 보기 좋게 */
+  letter-spacing: -0.5px; /* ��간을 살짝 좁혀서 더 보기 좋게 */
+}
+
+.header-paw-icon {
+  color: #85593A;
+  font-size: 2rem;
 }
 
 .logout-button { /* 로그아웃 버튼 스타일 */

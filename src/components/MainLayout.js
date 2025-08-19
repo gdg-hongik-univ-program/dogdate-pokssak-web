@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, NavLink } from 'react-router-dom';
+import { FaPaw } from 'react-icons/fa';
 import ProfileModal from './ProfileModal'; // ProfileModal 임포트
 import './MainLayout.css';
 
@@ -29,10 +30,8 @@ function MainLayout() {
   return (
     <div className="main-layout">
       <header className="main-header">
-        <h1 className="main-header-title">Mungeting 🐾</h1>
-        <button onClick={handleLogout} className="logout-button">
-          로그아웃
-        </button>
+        <h1 className="main-header-title">Mungeting</h1>
+        <FaPaw className="header-paw-icon" />
       </header>
       <main className="main-content">
         <Outlet context={{ openModal }} /> {/* openModal 함수를 context로 전달 */}
