@@ -1,6 +1,7 @@
 /* src/components/FormLayout.css */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap');
 
 .form-layout-container {
   background-color: #D2B48C;
@@ -45,13 +46,13 @@
 }
 
 .app-title {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
   font-size: 4.0rem;
   font-weight: 900;
   color: #ffffff;
   text-align: center;
   margin: 6rem 0 2rem 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

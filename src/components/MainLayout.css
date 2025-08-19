@@ -1,4 +1,5 @@
-@import url('https://cdn.jsdelivr.net/npm/g-market-sans@1.0.0/css/GmarketSans.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap');
 
 /* src/components/MainLayout.css */
 .main-layout {
@@ -24,7 +25,7 @@
 }
 
 .main-header-title { /* 헤더 타이틀 스타일 */
-  font-family: 'GmarketSansMedium', 'Pretendard Variable', sans-serif;
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
   font-size: 1.5rem; /* 24px */
   font-weight: 700; /* Bold */
   color: #111827;
