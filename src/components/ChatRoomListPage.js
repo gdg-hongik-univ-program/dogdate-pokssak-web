@@ -27,8 +27,33 @@ const ChatRoomListPage = () => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setChatRooms(data);
+          const chatroomData = await response.json();
+
+          // Fetch all matches to get other user nicknames
+          const matchesResponse = await fetch(`${BASE_URL}/api/matches/users/${userId}`, {
+            headers: { 'ngrok-skip-browser-warning': 'true' },
+          });
+
+          if (matchesResponse.ok) {
+            const matches = await matchesResponse.json();
+
+            const chatRoomsWithNicknames = chatroomData.map(room => {
+              const correspondingMatch = matches.find(match => match.id === room.matchId);
+              if (correspondingMatch) {
+                const otherUserNickname = 
+                  correspondingMatch.user1Id === parseInt(userId) 
+                    ? correspondingMatch.user2Nickname 
+                    : correspondingMatch.user1Nickname;
+                return { ...room, otherUserNickname };
+              } else {
+                return { ...room, otherUserNickname: '알 수 없는 사용자' };
+              }
+            });
+            setChatRooms(chatRoomsWithNicknames);
+          } else {
+            console.error('Failed to fetch matches for chat rooms');
+            setChatRooms(chatroomData); // Proceed with chatrooms without nicknames if matches fetch fails
+          }
         } else {
           const errorText = await response.text();
           throw new Error(`채팅방 목록 불러오기 실패: ${response.status} ${response.statusText} - ${errorText}`);

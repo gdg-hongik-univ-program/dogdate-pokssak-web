@@ -71,7 +71,4 @@
   color: white;
 }
 
-.blurred-buttons {
-  filter: blur(2px); /* Apply blur effect */
-  pointer-events: none; /* Disable clicks */
-}
+

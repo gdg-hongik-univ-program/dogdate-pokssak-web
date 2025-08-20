@@ -26,17 +26,17 @@ const LikesPage = () => {
 
       try {
         // Fetch sent requests
-        console.log(`Fetching sent requests from: ${BASE_URL}/api/matches/requests/sent/${userId}`);
         const sentResponse = await fetch(`${BASE_URL}/api/matches/requests/sent/${userId}`, {
           headers: { 'ngrok-skip-browser-warning': 'true' },
         });
-        console.log('Sent Response OK:', sentResponse.ok);
-        console.log('Sent Response Status:', sentResponse.status, sentResponse.statusText);
         if (sentResponse.ok) {
           const sentData = await sentResponse.json();
-          console.log('Sent requests raw data:', sentData);
           const sentRequestsWithDogs = await Promise.all(sentData.map(async (request) => {
             const otherUserId = request.user1Id === parseInt(userId) ? request.user2Id : request.user1Id;
+            if (!otherUserId) {
+              console.warn('otherUserId is undefined or null for request:', request);
+              return { ...request, dog: null };
+            }
             const dogResponse = await fetch(`${BASE_URL}/api/dogs/users/${otherUserId}`, {
               headers: { 'ngrok-skip-browser-warning': 'true' },
             });
@@ -48,26 +48,23 @@ const LikesPage = () => {
               return { ...request, dog: null };
             }
           }));
-          console.log('Sent requests with dogs:', sentRequestsWithDogs);
           setSentRequests(sentRequestsWithDogs);
         } else {
-          const errorText = await sentResponse.text();
-          console.error(`보낸 매칭 요청 불러오기 실패: ${sentResponse.status} ${sentResponse.statusText} - ${errorText}`);
-          throw new Error(`보낸 매칭 요청 불러오기 실패: ${sentResponse.status} ${sentResponse.statusText} - ${errorText}`);
+          throw new Error(`보낸 매칭 요청 불러오기 실패: ${sentResponse.status} ${sentResponse.statusText}`);
         }
 
         // Fetch received requests
-        console.log(`Fetching received requests from: ${BASE_URL}/api/matches/requests/received/${userId}`);
         const receivedResponse = await fetch(`${BASE_URL}/api/matches/requests/received/${userId}`, {
           headers: { 'ngrok-skip-browser-warning': 'true' },
         });
-        console.log('Received Response OK:', receivedResponse.ok);
-        console.log('Received Response Status:', receivedResponse.status, receivedResponse.statusText);
         if (receivedResponse.ok) {
           const receivedData = await receivedResponse.json();
-          console.log('Received requests raw data:', receivedData);
           const receivedRequestsWithDogs = await Promise.all(receivedData.map(async (request) => {
             const otherUserId = request.user1Id === parseInt(userId) ? request.user2Id : request.user1Id;
+            if (!otherUserId) {
+              console.warn('otherUserId is undefined or null for request:', request);
+              return { ...request, dog: null };
+            }
             const dogResponse = await fetch(`${BASE_URL}/api/dogs/users/${otherUserId}`, {
               headers: { 'ngrok-skip-browser-warning': 'true' },
             });
@@ -79,12 +76,9 @@ const LikesPage = () => {
               return { ...request, dog: null };
             }
           }));
-          console.log('Received requests with dogs:', receivedRequestsWithDogs);
           setReceivedRequests(receivedRequestsWithDogs);
         } else {
-          const errorText = await receivedResponse.text();
-          console.error(`받은 매칭 요청 불러오기 실패: ${receivedResponse.status} ${receivedResponse.statusText} - ${errorText}`);
-          throw new Error(`받은 매칭 요청 불러오기 실패: ${receivedResponse.status} ${receivedResponse.statusText} - ${errorText}`);
+          throw new Error(`받은 매칭 요청 불러오기 실패: ${receivedResponse.status} ${receivedResponse.statusText}`);
         }
 
       } catch (err) {
@@ -98,18 +92,56 @@ const LikesPage = () => {
     fetchRequests();
   }, [userId]);
 
-  const handleAccept = async (requestId) => {
+  const handleAccept = async (request) => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('사용자 ID를 찾을 수 없습니다. 로그인해주세요.');
+      return;
+    }
+
+    const toUserId = request.user1Id; // The sender of the received request
+
     try {
-      const response = await fetch(`${BASE_URL}/api/matches/requests/${requestId}/accept`, {
-        method: 'PUT',
-        headers: { 'ngrok-skip-browser-warning': 'true' },
+      const swipeResponse = await fetch(`${BASE_URL}/api/swipes/users/${userId}`, {
+        method: 'POST',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ toUserId: toUserId }),
       });
-      if (response.ok) {
-        alert('매칭 요청을 수락했습니다.');
-        // 성공 후 받은 요청 목록을 새로고침하거나 UI에서 해당 항목을 제거하는 로직 추가
-        setReceivedRequests(prev => prev.filter(req => req.id !== requestId));
+
+      if (swipeResponse.ok) {
+        const swipeResultText = await swipeResponse.text();
+        try {
+          const swipeResult = JSON.parse(swipeResultText);
+          if (swipeResult && swipeResult.id) { // Match successful
+            alert('매칭 성공! 채팅방이 생성되었습니다.');
+            // Refresh received requests to remove the accepted one
+            setReceivedRequests(prev => prev.filter(req => req.id !== request.id));
+            // Optionally navigate to chat or update chat list
+          } else {
+            alert('스와이프가 완료되었습니다. 상대방이 수락하면 매칭됩니다.');
+            setReceivedRequests(prev => prev.filter(req => req.id !== request.id));
+          }
+        } catch (jsonError) {
+          if (swipeResultText.includes('스와이프가 완료되었습니다.')) {
+            alert('스와이프가 완료되었습니다. 상대방이 수락하면 매칭됩니다.');
+            setReceivedRequests(prev => prev.filter(req => req.id !== request.id));
+          } else {
+            throw new Error(`스와이프 응답 파싱 오류: ${jsonError.message} - ${swipeResultText}`);
+          }
+        }
+      } else if (swipeResponse.status === 400) {
+        const errorText = await swipeResponse.text();
+        if (errorText.includes('이미 스와이프한 사용자입니다.')) {
+          alert('이미 스와이프한 사용자입니다.');
+        } else {
+          throw new Error(`스와이프 실패: ${swipeResponse.status} ${swipeResponse.statusText} - ${errorText}`);
+        }
       } else {
-        throw new Error(`매칭 요청 수락 실패: ${response.status} ${response.statusText}`);
+        const errorText = await swipeResponse.text();
+        throw new Error(`스와이프 실패: ${swipeResponse.status} ${swipeResponse.statusText} - ${errorText}`);
       }
     } catch (error) {
       console.error('Error accepting match request:', error);
@@ -117,16 +149,23 @@ const LikesPage = () => {
     }
   };
 
-  const handleReject = async (requestId) => {
+  const handleReject = async (request) => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('사용자 ID를 찾을 수 없습니다. 로그인해주세요.');
+      return;
+    }
+
+    const matchId = request.id; // Assuming request.id is the matchId for the pending request
+
     try {
-      const response = await fetch(`${BASE_URL}/api/matches/requests/${requestId}/reject`, {
+      const response = await fetch(`${BASE_URL}/api/matches/${matchId}/status?status=INACTIVE`, {
         method: 'PUT',
         headers: { 'ngrok-skip-browser-warning': 'true' },
       });
       if (response.ok) {
         alert('매칭 요청을 거절했습니다.');
-        // 성공 후 받은 요청 목록을 새로고침하거나 UI에서 해당 항목을 제거하는 로직 추가
-        setReceivedRequests(prev => prev.filter(req => req.id !== requestId));
+        setReceivedRequests(prev => prev.filter(req => req.id !== request.id));
       } else {
         throw new Error(`매칭 요청 거절 실패: ${response.status} ${response.statusText}`);
       }
@@ -145,9 +184,6 @@ const LikesPage = () => {
   }
 
   const dataToShow = activeTab === 'sent' ? sentRequests : receivedRequests;
-  console.log('dataToShow:', dataToShow);
-  console.log('activeTab:', activeTab);
-  console.log('receivedRequests (after set):', receivedRequests);
 
   return (
     <div className="likes-page-container">
@@ -181,9 +217,9 @@ const LikesPage = () => {
               <div key={request.id} className="match-request-item">
                 <DogProfileCard dog={dogToShow} onClick={() => openModal(dogToShow)} />
                 {activeTab === 'received' && (
-                  <div className="match-request-actions blurred-buttons">
-                    <button onClick={() => handleAccept(request.id)}>수락</button>
-                    <button onClick={() => handleReject(request.id)}>거절</button>
+                  <div className="match-request-actions">
+                    <button onClick={() => handleAccept(request)}>수락</button>
+                    <button onClick={() => handleReject(request)}>거절</button>
                   </div>
                 )}
               </div>

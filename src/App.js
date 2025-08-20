@@ -42,7 +42,7 @@ function App() {
           <Route path="home" element={<HomePage />} />
           <Route path="likes" element={<LikesPage />} />
           <Route path="match" element={<MatchPage />} />
-          <Route path="chat" element={<ChatPage />} />
+          <Route path="chat/:chatroomId" element={<ChatPage />} />
           <Route path="chat-list" element={<ChatRoomListPage />} />
         </Route>
 
