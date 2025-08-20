@@ -2,9 +2,9 @@
 .chat-room-list-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 420px; /* 모바일 화면 너비 기준 */
-  margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
+  height: 71vh;
+  max-width: auto; /* 모바일 화면 너비 기준 */
+  margin:  auto; /* 중앙 정렬 및 상하 여백 */
   border-radius: 12px; /* 둥근 모서리 */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   overflow: hidden; /* 내용이 넘칠 경우 숨김 */
