@@ -14,7 +14,7 @@ function SignupSuccessPage() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
             가입을 축하합니다!
           </h2>
-          <p>회원가입이 성공적으로 완료되었습니다.</p>
+          <p>회원가입이 완료되었습니다.</p>
         </div>
         <div className="bottom-action">
           <Link to="/login">

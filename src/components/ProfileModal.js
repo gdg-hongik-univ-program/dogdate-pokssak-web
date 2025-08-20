@@ -21,7 +21,7 @@ function ProfileModal({ dog, onClose, isMyDog }) {
     <div className="modal-backdrop" onClick={handleBackdropClick}>
       {/* Card-style modal */}
       <div className="modal-card">
-        <img src={dog.imageUrl} alt={dog.name} className="modal-card-background-image" />
+      <img src={dog.photoUrl || dog.imageUrl} alt={dog.name} className="modal-card-background-image" />
         <div className="modal-card-content">
           {isMyDog && (
             <button className="modal-edit-button">

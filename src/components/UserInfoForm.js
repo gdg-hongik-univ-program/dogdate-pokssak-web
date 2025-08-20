@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Input from './Input';
 import Select from './Select';
 import './FormLayout.css';
+import { BASE_URL } from '../config';
 
 const koreanRegions = {
     seoul: { label: '서울', districts: ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'] },
@@ -86,8 +87,8 @@ function UserInfoForm() {
 
         // API 명세에 맞게 데이터 재구성
         const apiData = {
-            userId: formData.userId, // 'userId' 키에 userId 값 할당
             nickname: formData.nickname,
+            userId: formData.userId, // 'userId' 키에 userId 값 할당
             password: formData.password,
             confirmPassword: formData.passwordConfirm,
             gender: genderOptions.find(opt => opt.value === formData.gender)?.label || '',
@@ -98,19 +99,23 @@ function UserInfoForm() {
         console.log('API로 전송할 데이터:', apiData); // 데이터 확인용 로그
 
         try {
-            const response = await fetch('http://192.168.0.15:8080/api/users/signup', {
+            const response = await fetch(` ${BASE_URL}/api/users/signup`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
+                },
                 body: JSON.stringify(apiData),
             });
 
             if (response.ok) {
-                console.log('회원 정보 저장 성공');
+                const responseData = await response.json();
+                console.log('회원 정보 저장 성공:', responseData);
                 // 다음 페이지로 사용자 ID 또는 전체 정보를 전달할 수 있습니다.
-                navigate('/signup-dog', { state: { userInfo: apiData } });
+                navigate('/signup-dog', { state: { userId: responseData.id } });
             } else {
                 const errorData = await response.json().catch(() => ({ message: '알 수 없는 오류' }));
-                alert(`회원가입 실패: ${errorData.message || '잘못된 요청입니다.'}`);
+                alert(`회원가입 실패: ${errorData.message || errorData.userId || '잘못된 요청입니다.'}`);
                 console.error('회원가입 실패:', errorData);
             }
         } catch (error) {

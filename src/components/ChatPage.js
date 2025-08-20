@@ -1,44 +1,126 @@
 // src/components/ChatPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
 import './ChatPage.css';
+import { BASE_URL } from '../config';
 
-
-function ChatPage() {
-  const [messages, setMessages] = useState([
-    { id: 1, text: '안녕하세요!', sender: 'other' },
-    { id: 2, text: '네, 안녕하세요!', sender: 'me' },
-    { id: 3, text: '채팅 기능이 추가되었네요.', sender: 'other' },
-  ]);
+const ChatPage = () => {
+  const { chatroomId } = useParams();
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const stompClientRef = useRef(null);
+  const userId = localStorage.getItem('userId'); // Get userId from localStorage
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === '') return;
-    const newMessages = [...messages, { id: messages.length + 1, text: newMessage, sender: 'me' }];
-    setMessages(newMessages);
-    setNewMessage('');
+  // Fetch chat history and mark messages as read on component mount
+  useEffect(() => {
+    const fetchChatHistoryAndMarkRead = async () => {
+      try {
+        // Fetch chat history
+        const historyResponse = await fetch(`${BASE_URL}/api/chat/${chatroomId}/history?userId=${userId}`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        });
+        if (historyResponse.ok) {
+          const history = await historyResponse.json();
+          setMessages(history);
+        } else {
+          console.error('Failed to fetch chat history');
+        }
+
+        // Mark messages as read
+        const readResponse = await fetch(`${BASE_URL}/api/chat/${chatroomId}/read?userId=${userId}`, {
+          method: 'PUT',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        });
+        if (readResponse.ok) {
+          console.log('Messages marked as read');
+        } else {
+          console.error('Failed to mark messages as read');
+        }
+
+      } catch (error) {
+        console.error('Error fetching chat history or marking messages as read:', error);
+      }
+    };
+
+    if (chatroomId && userId) {
+      fetchChatHistoryAndMarkRead();
+    }
+  }, [chatroomId, userId]);
+
+  // WebSocket (STOMP) connection and subscription
+  useEffect(() => {
+    const socket = new SockJS(`${BASE_URL}/ws-stomp`);
+    const stompClient = Stomp.over(socket);
+    stompClientRef.current = stompClient;
+
+    stompClient.connect({}, (frame) => {
+      console.log('Connected: ' + frame);
+
+      // Subscribe to the chat room
+      stompClient.subscribe(`/sub/chat/room/${chatroomId}`, (message) => {
+        const chatMessage = JSON.parse(message.body);
+        setMessages((prevMessages) => [...prevMessages, chatMessage]);
+      });
+
+    }, (error) => {
+      console.error('STOMP Error:', error);
+    });
+
+    // Disconnect on component unmount
+    return () => {
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.disconnect(() => {
+          console.log('Disconnected');
+        });
+      }
+    };
+  }, [chatroomId, userId]);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (newMessage.trim() && stompClientRef.current && stompClientRef.current.connected) {
+      const message = {
+        chatroomId: parseInt(chatroomId),
+        senderId: parseInt(userId),
+        content: newMessage,
+        type: 'CHAT'
+      };
+      stompClientRef.current.send('/pub/chat/message', {}, JSON.stringify(message));
+      setNewMessage('');
+    }
   };
 
   return (
-    <div className="chat-page">
-        
-        <div className="chat-messages">
-          {messages.map((message) => (
-            <div key={message.id} className={`message ${message.sender}`}>
-              <p>{message.text}</p>
-            </div>
-          ))}
-        </div>
-        <div className="chat-input">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="메시지를 입력하세요..."
-          />
-          <button onClick={handleSendMessage}>전송</button>
-        </div>
+    <div className="chat-page-container">
+      <div className="chat-header">
+        <h2>Chat Room {chatroomId}</h2>
       </div>
+      <div className="chat-messages">
+        {messages.map((msg, index) => (
+          <div key={index} className={`message ${msg.senderId === parseInt(userId) ? 'sent' : 'received'}`}>
+            <div className="message-content">
+              <p>{msg.senderNickname}: {msg.content}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <form className="chat-input-form" onSubmit={handleSendMessage}>
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Type a message..."
+        />
+        <button type="submit">Send</button>
+      </form>
+    </div>
   );
-}
+};
 
 export default ChatPage;

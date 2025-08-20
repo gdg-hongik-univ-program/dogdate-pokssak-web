@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import ChatPage from './components/ChatPage';
+import ChatRoomListPage from './components/ChatRoomListPage';
 
 // 페이지 컴포넌트 임포트
 import LoginPage from './components/LoginPage';
@@ -27,7 +28,7 @@ function App() {
     <Router>
       <Routes>
         {/* 1. 앱 시작 시 /login 페이지로 자동 이동 */}
-        <Route path="/" element={<Navigate replace to="/login" />} />
+        <Route path="/" element={<Navigate replace to="/app/home" />} />
         {/* 2. 로그인 및 회원가입 관련 페이지 */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup-user" element={<UserInfoForm />} />
@@ -42,6 +43,7 @@ function App() {
           <Route path="likes" element={<LikesPage />} />
           <Route path="match" element={<MatchPage />} />
           <Route path="chat" element={<ChatPage />} />
+          <Route path="chat-list" element={<ChatRoomListPage />} />
         </Route>
 
         {/* 4. 정의되지 않은 경로로 접근 시 */}
