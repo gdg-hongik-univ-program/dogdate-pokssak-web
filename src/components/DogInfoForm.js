@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './FormLayout.css'; // 공통 스타일 사용
 import './DogInfoForm.css'; // DogInfoForm 고유 스타일
+import { BASE_URL } from '../config';
 
 function DogInfoForm() {
   const [dogInfo, setDogInfo] = useState({
@@ -68,8 +69,11 @@ function DogInfoForm() {
     }
 
     try {
-      const response = await fetch(`https://54e143bc334e.ngrok-free.app/api/dogs/users/${userId}`, {
+      const response = await fetch(` ${BASE_URL}/api/dogs/users/${userId}`, {
         method: 'POST',
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        },
         body: formData,
       });
 

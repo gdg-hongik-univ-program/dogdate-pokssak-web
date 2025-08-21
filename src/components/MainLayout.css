@@ -95,7 +95,7 @@
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 60px; /* nav height */
+  padding-bottom: 10px; /* nav height */
 }
 
 .bottom-nav {
