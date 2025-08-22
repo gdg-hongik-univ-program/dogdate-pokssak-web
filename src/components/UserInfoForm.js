@@ -99,7 +99,7 @@ function UserInfoForm() {
         console.log('API로 전송할 데이터:', apiData); // 데이터 확인용 로그
 
         try {
-            const response = await fetch(` ${BASE_URL}/api/users/signup`, {
+            const response = await fetch(`${BASE_URL}/api/users/signup`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',

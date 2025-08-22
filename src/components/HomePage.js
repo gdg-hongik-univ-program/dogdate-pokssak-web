@@ -34,7 +34,7 @@ function HomePage() {
         }
 
         // 내 강아지 정보 가져오기
-        const myDogResponse = await fetch(` ${BASE_URL}/api/dogs/users/${userId}`, {
+        const myDogResponse = await fetch(`${BASE_URL}/api/dogs/users/${userId}`, {
           headers: {
             'ngrok-skip-browser-warning': 'true'
           }

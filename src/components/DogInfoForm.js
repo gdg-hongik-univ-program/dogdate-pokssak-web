@@ -69,7 +69,7 @@ function DogInfoForm() {
     }
 
     try {
-      const response = await fetch(` ${BASE_URL}/api/dogs/users/${userId}`, {
+      const response = await fetch(`${BASE_URL}/api/dogs/users/${userId}`, {
         method: 'POST',
         headers: {
           'ngrok-skip-browser-warning': 'true'

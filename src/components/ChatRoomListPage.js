@@ -1,4 +1,3 @@
-// src/components/ChatRoomListPage.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
@@ -9,7 +8,7 @@ const ChatRoomListPage = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const userId = localStorage.getItem('userId'); // Get userId from localStorage
+  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
     const fetchChatRooms = async () => {
@@ -19,45 +18,68 @@ const ChatRoomListPage = () => {
         return;
       }
 
+      setIsLoading(true);
       try {
         const response = await fetch(`${BASE_URL}/api/chat/users/${userId}/chatrooms`, {
-          headers: {
-            'ngrok-skip-browser-warning': 'true',
-          },
+          headers: { 'ngrok-skip-browser-warning': 'true' },
         });
 
-        if (response.ok) {
-          const chatroomData = await response.json();
-
-          // Fetch all matches to get other user nicknames
-          const matchesResponse = await fetch(`${BASE_URL}/api/matches/users/${userId}`, {
-            headers: { 'ngrok-skip-browser-warning': 'true' },
-          });
-
-          if (matchesResponse.ok) {
-            const matches = await matchesResponse.json();
-
-            const chatRoomsWithNicknames = chatroomData.map(room => {
-              const correspondingMatch = matches.find(match => match.id === room.matchId);
-              if (correspondingMatch) {
-                const otherUserNickname = 
-                  correspondingMatch.user1Id === parseInt(userId) 
-                    ? correspondingMatch.user2Nickname 
-                    : correspondingMatch.user1Nickname;
-                return { ...room, otherUserNickname };
-              } else {
-                return { ...room, otherUserNickname: '알 수 없는 사용자' };
-              }
-            });
-            setChatRooms(chatRoomsWithNicknames);
-          } else {
-            console.error('Failed to fetch matches for chat rooms');
-            setChatRooms(chatroomData); // Proceed with chatrooms without nicknames if matches fetch fails
-          }
-        } else {
-          const errorText = await response.text();
-          throw new Error(`채팅방 목록 불러오기 실패: ${response.status} ${response.statusText} - ${errorText}`);
+        if (!response.ok) {
+          throw new Error(`채팅방 목록 불러오기 실패: ${response.statusText}`);
         }
+
+        const chatroomData = await response.json();
+
+        const matchesResponse = await fetch(`${BASE_URL}/api/matches/users/${userId}/active`, {
+          headers: { 'ngrok-skip-browser-warning': 'true' },
+        });
+
+        if (!matchesResponse.ok) {
+          throw new Error(`매치 정보 불러오기 실패: ${matchesResponse.statusText}`);
+        }
+
+        const matches = await matchesResponse.json();
+        const matchesMap = new Map(matches.map(m => [m.id, m]));
+
+        const chatRoomsWithDetails = await Promise.all(chatroomData.map(async (room) => {
+          const correspondingMatch = matchesMap.get(room.matchId);
+          let otherUserNickname = '알 수 없는 사용자';
+
+          if (correspondingMatch) {
+            otherUserNickname = 
+              correspondingMatch.user1Id === parseInt(userId) 
+                ? correspondingMatch.user2Nickname 
+                : correspondingMatch.user1Nickname;
+          }
+
+          let lastMessage = '메시지 없음';
+          let lastMessageTimestamp = null;
+
+          try {
+            const historyResponse = await fetch(`${BASE_URL}/api/chat/${room.id}/history?userId=${userId}&page=0&size=1`, {
+                headers: { 'ngrok-skip-browser-warning': 'true' },
+            });
+            if (historyResponse.ok) {
+              const history = await historyResponse.json();
+              if (history.length > 0) {
+                lastMessage = history[0].content;
+                lastMessageTimestamp = history[0].sentAt;
+              }
+            }
+          } catch (e) {
+            console.error(`Failed to fetch last message for room ${room.id}`, e);
+          }
+
+          return {
+            ...room,
+            otherUserNickname,
+            lastMessage,
+            lastMessageTimestamp,
+          };
+        }));
+
+        setChatRooms(chatRoomsWithDetails);
+
       } catch (err) {
         setError(err.message);
         console.error('Error fetching chat rooms:', err);
@@ -66,7 +88,9 @@ const ChatRoomListPage = () => {
       }
     };
 
-    fetchChatRooms();
+    if (userId) {
+      fetchChatRooms();
+    }
   }, [userId]);
 
   if (isLoading) {
@@ -87,12 +111,14 @@ const ChatRoomListPage = () => {
           <p>아직 채팅방이 없습니다.</p>
         ) : (
           chatRooms.map((room) => (
-            <div key={room.chatroomId} className="chat-room-item" onClick={() => navigate(`/app/chat/${room.chatroomId}`)}>
+            <div key={room.id} className="chat-room-item" onClick={() => navigate(`/app/chat/${room.id}`)}>
               <div className="chat-room-info">
-                <h3>{room.otherUserNickname || '알 수 없는 사용자'}</h3>
-                <p className="last-message">{room.lastMessage || '메시지 없음'}</p>
+                <h3>{room.otherUserNickname}</h3>
+                <p className="last-message">{room.lastMessage}</p>
               </div>
-              <span className="last-message-time">{room.lastMessageTimestamp ? new Date(room.lastMessageTimestamp).toLocaleTimeString() : ''}</span>
+              {room.lastMessageTimestamp && (
+                  <span className="last-message-time">{new Date(room.lastMessageTimestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
+              )}
             </div>
           ))
         )}
