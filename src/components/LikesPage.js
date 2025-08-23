@@ -2,146 +2,104 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import DogProfileCard from './DogprofileCard';
 import './LikesPage.css';
-import { BASE_URL } from '../config';
+
+// --- 가짜 데이터 ---
+const fakeSentRequests = [
+  {
+    id: 1,
+    toUserNickname: '행복한견주',
+    dog: {
+      id: 101,
+      name: '레오',
+      breed: '포메라니안',
+      age: 3,
+      gender: '남아',
+      city: '경기',
+      district: '성남시',
+      bio: '작지만 용감한 레오! 다른 강아지 친구들과 어울리는 걸 좋아해요.',
+      imageUrl: 'https://images.unsplash.com/photo-1598875184988-5e67b1a874b8?q=80&w=800',
+      likes: 110
+    }
+  },
+  {
+    id: 2,
+    toUserNickname: '보리누나',
+    dog: {
+      id: 102,
+      name: '보리',
+      breed: '시츄',
+      age: 4,
+      gender: '여아',
+      city: '인천',
+      district: '연수구',
+      bio: '순하고 낮잠 자는 걸 좋아하는 보리 공주님이에요.',
+      imageUrl: 'https://images.unsplash.com/photo-1548681528-6a5c45b66b42?q=80&w=800',
+      likes: 100
+    }
+  }
+];
+
+const fakeReceivedRequests = [
+  {
+    id: 3,
+    fromUserNickname: '해피보호자',
+    dog: {
+      id: 201,
+      name: '해피',
+      breed: '비글',
+      age: 1,
+      gender: '남아',
+      city: '서울',
+      district: '용산구',
+      bio: '지치지 않는 에너자이저 해피! 같이 뛰어놀아요!',
+      imageUrl: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=800',
+      distance: '1km'
+    }
+  },
+  {
+    id: 4,
+    fromUserNickname: '두부언니',
+    dog: {
+      id: 202,
+      name: '두부',
+      breed: '프렌치 불독',
+      age: 2,
+      gender: '여아',
+      city: '서울',
+      district: '성동구',
+      bio: '먹는 것과 자는 것을 가장 좋아하는 순둥이 두부.',
+      imageUrl: 'https://images.unsplash.com/photo-1597633425046-08f5110420b5?q=80&w=800',
+      distance: '2km'
+    }
+  }
+];
+// --- 가짜 데이터 끝 ---
 
 const LikesPage = () => {
   const { openModal } = useOutletContext();
-  const [activeTab, setActiveTab] = useState('received'); // Default to received tab
+  const [activeTab, setActiveTab] = useState('received');
   const [sentRequests, setSentRequests] = useState([]);
   const [receivedRequests, setReceivedRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      if (!userId) {
-        setError('사용자 ID를 찾을 수 없습니다. 로그인해주세요.');
-        setIsLoading(false);
-        return;
-      }
+    // 백엔드 연결 대신 가짜 데이터를 사용합니다.
+    setIsLoading(true);
+    setTimeout(() => {
+      setSentRequests(fakeSentRequests);
+      setReceivedRequests(fakeReceivedRequests);
+      setIsLoading(false);
+    }, 500); // 0.5초 로딩 효과
+  }, []);
 
-      setIsLoading(true);
-      setError('');
-
-      try {
-        // Using /api/swipes/ endpoint as this seems to be the actual data source
-        // Fetch received swipes (these are the actionable requests)
-        const receivedResponse = await fetch(`${BASE_URL}/api/swipes/received/${userId}`, {
-          headers: { 'ngrok-skip-browser-warning': 'true' },
-        });
-        if (receivedResponse.ok) {
-          const receivedData = await receivedResponse.json();
-          const receivedRequestsWithDogs = await Promise.all(receivedData.map(async (request) => {
-            const otherUserId = request.fromUserId;
-            try {
-              const dogResponse = await fetch(`${BASE_URL}/api/dogs/users/${otherUserId}`, {
-                headers: { 'ngrok-skip-browser-warning': 'true' },
-              });
-              if (dogResponse.ok) {
-                const dogs = await dogResponse.json();
-                return { ...request, dog: (dogs && dogs.length > 0) ? dogs[0] : null };
-              } else {
-                return { ...request, dog: null };
-              }
-            } catch (dogError) {
-              return { ...request, dog: null };
-            }
-          }));
-          setReceivedRequests(receivedRequestsWithDogs);
-        } else {
-          throw new Error(`받은 요청 불러오기 실패: ${receivedResponse.status} ${receivedResponse.statusText}`);
-        }
-
-        // Fetch sent swipes
-        const sentResponse = await fetch(`${BASE_URL}/api/swipes/sent/${userId}`, {
-          headers: { 'ngrok-skip-browser-warning': 'true' },
-        });
-        if (sentResponse.ok) {
-          const sentData = await sentResponse.json();
-          const sentRequestsWithDogs = await Promise.all(sentData.map(async (request) => {
-            const otherUserId = request.toUserId;
-            try {
-              const dogResponse = await fetch(`${BASE_URL}/api/dogs/users/${otherUserId}`, {
-                headers: { 'ngrok-skip-browser-warning': 'true' },
-              });
-              if (dogResponse.ok) {
-                const dogs = await dogResponse.json();
-                return { ...request, dog: (dogs && dogs.length > 0) ? dogs[0] : null };
-              } else {
-                return { ...request, dog: null };
-              }
-            } catch (dogError) {
-              return { ...request, dog: null };
-            }
-          }));
-          setSentRequests(sentRequestsWithDogs);
-        } else {
-          throw new Error(`보낸 요청 불러오기 실패: ${sentResponse.status} ${sentResponse.statusText}`);
-        }
-
-      } catch (err) {
-        setError(err.message);
-        console.error('Error fetching requests:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (userId) {
-      fetchRequests();
-    }
-  }, [userId]);
-
-  const handleAccept = async (request) => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      alert('사용자 ID를 찾을 수 없습니다. 로그인해주세요.');
-      return;
-    }
-
-    const toUserId = request.fromUserId;
-
-    try {
-      const swipeResponse = await fetch(`${BASE_URL}/api/swipes/users/${userId}`, {
-        method: 'POST',
-        headers: {
-          'ngrok-skip-browser-warning': 'true',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ toUserId: toUserId, isLike: true }), // Explicitly like back
-      });
-
-      if (swipeResponse.ok) {
-        const swipeResultText = await swipeResponse.text();
-        try {
-          const swipeResult = JSON.parse(swipeResultText);
-          if (swipeResult && swipeResult.status === 'MATCHED') {
-            alert('매칭 성공! 채팅방이 생성되었습니다.');
-          } else {
-            alert('매칭을 수락했습니다.');
-          }
-        } catch (e) {
-           alert('매칭을 수락했습니다.');
-        }
-        setReceivedRequests(prev => prev.filter(req => req.id !== request.id));
-      } else {
-        const errorText = await swipeResponse.text();
-        if (errorText.includes('이미 스와이프한 사용자입니다.')) {
-          alert('이미 처리된 요청입니다.');
-          setReceivedRequests(prev => prev.filter(req => req.id !== request.id));
-        } else {
-          throw new Error(`수락 실패: ${swipeResponse.status} ${errorText}`);
-        }
-      }
-    } catch (error) {
-      console.error('Error accepting request:', error);
-      alert(`매칭 요청 수락 중 오류 발생: ${error.message}`);
-    }
+  const handleAccept = (request) => {
+    alert(`'${request.dog.name}'의 매칭 요청을 수락했습니다. (데모)`);
+    setReceivedRequests(prev => prev.filter(req => req.id !== request.id));
   };
 
   const handleReject = (requestToReject) => {
-    alert('매칭 요청을 거절했습니다.');
+    alert(`'${requestToReject.dog.name}'의 매칭 요청을 거절했습니다. (데모)`);
     setReceivedRequests(prev => prev.filter(req => req.id !== requestToReject.id));
   };
 

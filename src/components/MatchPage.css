@@ -34,7 +34,7 @@
   align-items: center;
   padding: 0 1rem 1rem; /* ▼ 상단 패딩만 제거 */
   box-sizing: border-box;
-  background-color: #D2B48C; /* Ocher background color */
+  
   border-radius: 12px; /* Added for rounded corners */
 }
 

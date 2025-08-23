@@ -56,6 +56,7 @@
 }
 
 .my-dog-profile-wrapper {
+  position: relative;
   display: flex;
   justify-content: center;
   width: 300px; /* 1.5 times the standard dog-card width */
@@ -64,6 +65,19 @@
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   margin: 0 auto;
+}
+
+.my-dog-title-on-card {
+  position: absolute;
+  top: 85%; /* Moved down */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #5a5a5a; /* Darker gray */
+  font-size: 2rem;
+  font-weight: bold;
+  z-index: 10;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+  pointer-events: none;
 }
 
 .my-dog-profile-wrapper:hover {
