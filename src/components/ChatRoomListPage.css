@@ -2,28 +2,33 @@
 .chat-room-list-container {
   display: flex;
   flex-direction: column;
-  height: 71vh;
+  height: 100%;
   max-width: auto; /* 모바일 화면 너비 기준 */
   margin:  auto; /* 중앙 정렬 및 상하 여백 */
   border-radius: 12px; /* 둥근 모서리 */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   overflow: hidden; /* 내용이 넘칠 경우 숨김 */
-  background-color: #ffffff;
+  background-color: #D2B48C;
 }
 
 .chat-room-list-header {
   border-bottom: 1px solid #e5e7eb; /* neutral-200 */
-  background-color: #f7f7f7; /* Light background for header */
+  background-color: #bc8f71; /* Light background for header */
   text-align: center;
   font-size: 1.125rem; /* text-lg */
   color: #111827; /* neutral-900 */
   font-weight: 600;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .chat-room-list-content {
   flex-grow: 1;
   padding: 1rem;
   overflow-y: auto;
+  display: flex; /* Ensure it's a flex container */
+  flex-direction: column; /* Stack items vertically */
+  gap: 1.5rem; /* Spacing between items */
 }
 
 .chat-room-item {
@@ -31,13 +36,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #f1f0f0; /* Light border between items */
+  /* border-bottom: 1px solid #f1f0f0; */ /* Removed for spacing */
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  border-radius: 8px; /* Added for subtle rounding */
+  background-color: #ffffff; /* Changed to white */
 }
 
 .chat-room-item:hover {
-  background-color: #f9f9f9;
+  background-color: #e0e0e0; /* Slightly darker gray for hover */
 }
 
 .chat-room-info h3 {

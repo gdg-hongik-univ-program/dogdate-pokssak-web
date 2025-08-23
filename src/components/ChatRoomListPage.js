@@ -111,7 +111,7 @@ const ChatRoomListPage = () => {
           <p>아직 채팅방이 없습니다.</p>
         ) : (
           chatRooms.map((room) => (
-            <div key={room.id} className="chat-room-item" onClick={() => navigate(`/app/chat/${room.id}`)}>
+            <div key={room.id} className="chat-room-item" onClick={() => navigate(`/app/chat/${room.id}`, { state: { otherUserNickname: room.otherUserNickname } })}>
               <div className="chat-room-info">
                 <h3>{room.otherUserNickname}</h3>
                 <p className="last-message">{room.lastMessage}</p>

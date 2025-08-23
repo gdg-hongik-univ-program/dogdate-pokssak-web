@@ -1,10 +1,11 @@
 /* src/components/HomePage.css */
 .home-container {
     padding: 1rem;
-    background-color: #f9fafb;
+    background-color: #D2B48C;
     height: 100%;
     box-sizing: border-box;
     overflow-y: auto;
+    border-radius: 12px; /* Added for rounded corners */
 }
 
 /* 내 강아지 섹션 */
