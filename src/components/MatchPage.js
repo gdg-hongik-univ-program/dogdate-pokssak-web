@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
+import { FaHeart, FaTimes, FaBolt } from 'react-icons/fa';
 import DogProfileCard from './DogprofileCard';
 import './MatchPage.css';
 import { BASE_URL } from '../config';
@@ -11,7 +12,8 @@ function MatchPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(''); // 에러 상태 추가
-  
+  const cardRef = useRef(null);
+  const [transformStyle, setTransformStyle] = useState({});
 
   useEffect(() => {
     const fetchPotentialMatches = async () => {
@@ -63,8 +65,34 @@ function MatchPage() {
   fetchPotentialMatches();
   }, []); // userId가 변경될 때마다 다시 불러오도록 의존성 배열에 추가
 
-  const handleAction = async (action) => { // async 키워드 추가
-    if (characters.length === 0) return; // 캐릭터가 없으면 아무것도 하지 않음
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+
+    const { left, top, width, height } = cardRef.current.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+
+    const mouseX = e.clientX - centerX;
+    const mouseY = e.clientY - centerY;
+
+    const rotateX = (mouseY / (height / 2)) * -10; // Max 10deg rotation
+    const rotateY = (mouseX / (width / 2)) * 10;  // Max 10deg rotation
+
+    setTransformStyle({
+      transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`,
+      transition: 'none',
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTransformStyle({
+      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)',
+      transition: 'transform 0.5s ease-in-out',
+    });
+  };
+
+  const handleAction = async (action) => {
+    if (characters.length === 0) return;
 
     const character = characters[currentIndex];
     const userId = localStorage.getItem('userId');
@@ -75,8 +103,11 @@ function MatchPage() {
       return;
     }
 
+    console.log(`Performing action: ${action} for user ${character.name} (ID: ${character.id})`);
+
     if (action === 'Like') {
       try {
+        console.log(`Sending Like request to: ${BASE_URL}/api/swipes/like/${userId}/${character.id}`);
         const response = await fetch(`${BASE_URL}/api/swipes/like/${userId}/${character.id}`, {
           method: 'POST',
           headers: {
@@ -86,7 +117,10 @@ function MatchPage() {
         });
 
         if (response.ok) {
-          console.log(`Liked ${character.name}`);
+          console.log(`Successfully liked ${character.name}`);
+          alert(`${character.name}님에게 좋아요를 보냈습니다!`);
+          const nextIndex = (currentIndex + 1) % characters.length;
+          setCurrentIndex(nextIndex);
         } else {
           const errorText = await response.text();
           console.error(`Failed to like ${character.name}: ${response.status} ${response.statusText} - ${errorText}`);
@@ -96,18 +130,18 @@ function MatchPage() {
         console.error('Like API call error:', error);
         alert('좋아요 처리 중 문제가 발생했습니다.');
       }
+    } else if (action === 'Skip') {
+      console.log(`Skipping ${character.name}`);
+      const nextIndex = (currentIndex + 1) % characters.length;
+      setCurrentIndex(nextIndex);
     }
-
-    // 다음 사용자로 이동 (Skip 또는 Like 후)
-    const nextIndex = (currentIndex + 1) % characters.length;
-    setCurrentIndex(nextIndex);
   };
 
   const handleMatchClick = async () => {
-    if (characters.length === 0) return; // 캐릭터가 없으면 아무것도 하지 않음
+    if (characters.length === 0) return;
 
     const character = characters[currentIndex];
-    const userId = localStorage.getItem('userId'); // 로컬 스토리지에서 userId 가져오기
+    const userId = localStorage.getItem('userId');
 
     if (!userId) {
       alert('사용자 ID를 찾을 수 없습니다. 로그인해주세요.');
@@ -115,7 +149,10 @@ function MatchPage() {
       return;
     }
 
+    console.log(`Attempting to match with ${character.name} (ID: ${character.id})`);
+
     try {
+      console.log(`Sending Match request to: ${BASE_URL}/api/swipes/users/${userId}`);
       const swipeResponse = await fetch(`${BASE_URL}/api/swipes/users/${userId}`, {
         method: 'POST',
         headers: {
@@ -125,21 +162,20 @@ function MatchPage() {
         body: JSON.stringify({ toUserId: character.id }),
       });
 
+      console.log('Match response status:', swipeResponse.status);
+      const swipeResultText = await swipeResponse.text();
+      console.log('Match response text:', swipeResultText);
+
       if (swipeResponse.ok) {
-        const swipeResultText = await swipeResponse.text();
-        
         try {
           const swipeResult = JSON.parse(swipeResultText);
-          // If a match object is returned, it means a successful match
-          if (swipeResult && swipeResult.id) { // Assuming swipeResult.id is the matchId
+          if (swipeResult && swipeResult.id) {
             const matchId = swipeResult.id;
             console.log('매치 성공! 매치 ID:', matchId);
-
-            // Get the chatroom ID based on the matchId
+            alert('매치 성공! 채팅방으로 이동합니다.');
+            
             const chatroomResponse = await fetch(`${BASE_URL}/api/chat/room/match/${matchId}`, {
-              headers: {
-                'ngrok-skip-browser-warning': 'true',
-              },
+              headers: { 'ngrok-skip-browser-warning': 'true' },
             });
 
             if (chatroomResponse.ok) {
@@ -154,15 +190,17 @@ function MatchPage() {
               throw new Error(`채팅방 조회 실패: ${chatroomResponse.status} ${chatroomResponse.statusText} - ${errorText}`);
             }
           } else {
-            // No match object returned, meaning swipe completed but no immediate match
             console.log('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
             alert('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
+            const nextIndex = (currentIndex + 1) % characters.length;
+            setCurrentIndex(nextIndex);
           }
         } catch (jsonError) {
-          // If response is not JSON, it's likely "스와이프가 완료되었습니다."
           if (swipeResultText.includes('스와이프가 완료되었습니다.')) {
             console.log('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
             alert('매칭 신청이 완료되었습니다. 상대방이 수락하면 채팅방이 생성됩니다.');
+            const nextIndex = (currentIndex + 1) % characters.length;
+            setCurrentIndex(nextIndex);
           } else {
             throw new Error(`스와이프 응답 파싱 오류: ${jsonError.message} - ${swipeResultText}`);
           }
@@ -208,7 +246,14 @@ function MatchPage() {
     <div className='match-page-container'>
       <div className='card-container'>
         {currentCard ? (
-          <div className="match-page-card-wrapper" onClick={() => openModal(currentCard)}>
+          <div 
+            className="match-page-card-wrapper"
+            onClick={() => openModal(currentCard)}
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={transformStyle}
+          >
             <DogProfileCard dog={currentCard.dog} />
           </div>
         ) : (
@@ -216,10 +261,11 @@ function MatchPage() {
         )}
       </div>
       <div className='buttons'>
-        <button onClick={() => handleAction('Skip')}>Skip</button>
-        <button onClick={handleMatchClick}>Match</button>
-        <button onClick={() => handleAction('Like')}>Like</button>
+        <button className="action-button dislike" onClick={() => handleAction('Skip')}><FaTimes /><span className="button-text">건너뛰기</span></button>
+        <button className="action-button match" onClick={handleMatchClick}><FaBolt /><span className="button-text">매치</span></button>
+        <button className="action-button like" onClick={() => handleAction('Like')}><FaHeart /><span className="button-text">좋아요</span></button>
       </div>
+      
     </div>
   );
 }

@@ -2,10 +2,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap');
 
 /* src/components/MainLayout.css */
+/* MainLayout.css 또는 전역 CSS 파일에 추가 */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+}
 .main-layout {
   display: flex;
   flex-direction: column;
-  height: 97vh;
+  height: 93vh;
   background-color: #ffffff;
   max-width: 420px; /* 모바일 화면 너비 기준 */
   margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
@@ -19,7 +31,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  background-color: #f3f4f6;
+  background-color: #ebb76b;
   flex-wrap: wrap; /* Allow items to wrap if space is limited */
 }
 
@@ -27,7 +39,7 @@
   font-family: 'Inter', 'Noto Sans KR', sans-serif;
   font-size: 1.5rem;
   font-weight: 900;
-  color: #000000;
+  color: #85593A;
   text-align: center;
   letter-spacing: -0.03em;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -93,9 +105,8 @@
 }
 
 .main-content {
-  flex: 1;
+  flex: 100vh;
   overflow-y: auto;
-  padding-bottom: 60px; /* nav height */
 }
 
 .bottom-nav {
@@ -104,11 +115,12 @@
   left: 0;
   right: 0;
   height: 60px;
-  background-color: #ffffff;
-  border-top: 1px solid #e5e7eb; /* neutral-200 */
+  background-color: #85593A; /* Black background as requested */
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .nav-item {
@@ -119,9 +131,10 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  color: #9ca3af; /* neutral-400 */
+  color: #ffffff; /* White for inactive items */
   font-size: 0.75rem;
   text-decoration: none; /* NavLink가 a 태그로 렌더링되므로 밑줄 제거 */
+  border-radius: 8px; /* Added for subtle rounding */
 }
 
 .nav-item i {
@@ -129,5 +142,5 @@
 }
 
 .nav-item.active {
-  color: #111827; /* neutral-900 */
+  color: #f0f0f0; /* Slightly off-white for active items */
 }

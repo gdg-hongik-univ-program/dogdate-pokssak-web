@@ -3,14 +3,12 @@
 .chat-page-container {
 
   display: flex;
-  
   flex-direction: column;
   
-  height: 100vh;
+  height: 100%;
   
   max-width: 420px; /* 모바일 화면 너비 기준 */
   
-  margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
   
   border-radius: 12px; /* 둥근 모서리 */
   
@@ -18,7 +16,7 @@
   
   overflow: hidden; /* 내용이 넘칠 경우 숨김 */
   
-  background-color: #ffffff;
+  background-color: #D2B48C;
   
   }
   
@@ -41,6 +39,11 @@
   font-weight: 600;
   
   }
+
+.chat-header h2 {
+  font-size: 1rem; /* Smaller font size for nickname */
+  margin: 0;
+}
   
   
   
@@ -56,7 +59,7 @@
   
   flex-direction: column;
   
-  gap: 0.5rem; /* Space between messages */
+  gap: 0.75rem; /* Increased space between messages */
   
   }
   
@@ -88,13 +91,17 @@
   
   .message-content {
   
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.1rem; /* Increased padding */
   
   border-radius: 0.75rem; /* Slightly more rounded */
   
-  max-width: 75%; /* Allow messages to take more width */
+  max-width: 85%; /* Increased max-width for better readability */
   
   word-wrap: break-word; /* Break long words */
+  
+  font-size: 1rem; /* Increased font size */
+  
+  line-height: 1.5; /* Added line-height for better readability */
   
   }
   
@@ -112,9 +119,9 @@
   
   .message.received .message-content {
   
-  background-color: #e5e7eb; /* Light neutral background */
+  background-color: #ffffff; /* Changed for better contrast */
   
-  color: #374151; /* neutral-700 */
+  color: #111827; /* Changed for better contrast */
   
   }
   

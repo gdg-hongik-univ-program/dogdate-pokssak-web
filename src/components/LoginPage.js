@@ -1,7 +1,6 @@
 // src/components/LoginPage.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaPaw } from 'react-icons/fa';
 import Input from './Input';
 import './FormLayout.css'; // Revert to original CSS file
 import { BASE_URL } from '../config';
@@ -79,24 +78,20 @@ function LoginPage() {
   return (
     <div className="form-layout-container">
       <header className="header">
-      <h1 className="app-title">Mungating</h1>
         <div className="logo-container">
           <img src="/images/image.png" alt="Logo" className="logo" />
         </div>
+        <h1 className="header-title">로그인</h1>
       </header>
       <main className="content">
-      <div className="login-card">
-          <h1 className="header-title">로그인</h1>
-          <form onSubmit={handleSubmit} className="form-content">
-            <Input
+        <form onSubmit={handleSubmit} className="form-content">
+          <Input
             label="ID"
             type="text"
             name="userId"
             value={formData.userId}
             onChange={handleChange}
             required
-            placeholder="ID"
-            icon={<FaPaw />}
           />
           <Input
             label="PW"
@@ -105,18 +100,14 @@ function LoginPage() {
             value={formData.password}
             onChange={handleChange}
             required
-            placeholder="Password"
-            icon={<FaPaw />}
-
           />
-           <div className="bottom-action">
-              <button type="submit" className="submit-button">로그인</button>
-            </div>
-          </form>
-          <p className="link-text">
-            계정이 없으신가요? <Link to="/signup-user">회원가입</Link>
-          </p>
-        </div>
+          <div className="bottom-action">
+            <button type="submit" className="submit-button">로그인</button>
+          </div>
+        </form>
+        <p className="link-text">
+          계정이 없으신가요? <Link to="/signup-user">회원가입</Link>
+        </p>
       </main>
     </div>
   );
