@@ -3,6 +3,8 @@ import { useOutletContext, useNavigate } from 'react-router-dom'; // useNavigate
 import './HomePage.css';
 import { BASE_URL } from '../config';
 import DogProfileCard from './DogprofileCard';
+import TiltableDogCard from './TiltableDogCard';
+import MyDogProfileCard from './MyDogProfileCard';
 import { FiSettings } from "react-icons/fi";
 
 // API 호출을 위한 가짜 데이터 (더미 데이터는 이제 사용하지 않음)
@@ -108,16 +110,17 @@ function HomePage() {
           </button>
         </div>
         <div className="my-dog-profile-wrapper">
-          <DogProfileCard 
-            dog={myDog} 
-            isEditable={true} 
-            onSave={handleSaveMyDog}
-            onClick={() => openModal(myDog)}  
-          />
+          <TiltableDogCard dog={myDog} onClick={() => openModal(myDog)}>
+            <MyDogProfileCard 
+              dog={myDog} 
+              isEditable={true} 
+              onSave={handleSaveMyDog}
+            />
+          </TiltableDogCard>
         </div>
       </section>
       <div className="hall-of-fame-section">
-        <h2 className="section-title">멍에의 전당</h2>
+        <h2 className="hall-of-fame-title">멍에의 전당</h2>
       </div>
 
       <section className="hall-of-fame-section">
@@ -125,14 +128,14 @@ function HomePage() {
         <div className="dog-list-scroll-container">
           <div className="dog-list">
             {nearbyDogs.map(dog => (
-              <div key={dog.id} className="dog-card" onClick={() => openModal(dog)}>
+              <TiltableDogCard key={dog.id} dog={dog} onClick={() => openModal(dog)}>
                 <img src={dog.photoUrl || dog.imageUrl} alt={dog.name} className="dog-card-background-image" />
                 <div className="dog-card-content">
                   <h3 className="dog-name">{dog.name}</h3>
                   <p className="dog-details">{dog.breed} / {dog.age}살</p>
                   <p className="dog-extra-info">{dog.distance} 이내</p>
                 </div>
-              </div>
+              </TiltableDogCard>
             ))}
           </div>
         </div>
@@ -143,14 +146,14 @@ function HomePage() {
         <div className="dog-list-scroll-container">
           <div className="dog-list">
             {popularDogs.map(dog => (
-              <div key={dog.id} className="dog-card" onClick={() => openModal(dog)}>
+              <TiltableDogCard key={dog.id} dog={dog} onClick={() => openModal(dog)}>
                 <img src={dog.photoUrl || dog.imageUrl} alt={dog.name} className="dog-card-background-image" />
                 <div className="dog-card-content">
                   <h3 className="dog-name">{dog.name}</h3>
                   <p className="dog-details">{dog.breed} / {dog.age}살</p>
                   <p className="dog-extra-info">하트: {dog.likes}</p>
                 </div>
-              </div>
+              </TiltableDogCard>
             ))}
           </div>
         </div>

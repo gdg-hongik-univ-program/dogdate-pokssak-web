@@ -1,10 +1,9 @@
-/* src/components/DogProfileCard.css */
+/* src/components/MyDogProfileCard.css */
 
 .dog-profile-card {
   position: relative; /* For positioning children */
   width: 100%;
   height: 100%; /* Ensure it fills its parent */
-  /* aspect-ratio: 1 / 1.25; */ /* Removed to allow independent width/height control */
   background-color: #f0f0f0; /* Fallback color */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -28,7 +27,7 @@
   z-index: 1;
 }
 
-.dog-card-content {
+.my-dog-content {
   position: relative;
   width: 100%;
   height: 100%;
@@ -36,7 +35,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end; /* Push content to the bottom */
-  padding: 0.75rem;
+  padding: 1.5rem; /* Increased padding for larger card */
   box-sizing: border-box;
   /* Gradient for text readability */
   background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 20%, transparent 80%);
@@ -45,9 +44,9 @@
 }
 
 .dog-profile-card .dog-name {
-  font-size: 1.2rem;
+  font-size: 1.5rem; /* Increased font size */
   font-weight: 600;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.5rem; /* Increased margin */
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
@@ -56,19 +55,19 @@
 
 .dog-profile-card .dog-details,
 .dog-profile-card .dog-extra-info {
-  font-size: 0.85rem;
+  font-size: 1rem; /* Increased font size */
   color: #e0e0e0;
-  line-height: 1.3;
+  line-height: 1.4;
   margin: 0;
 }
 
 .dog-profile-card .dog-profile-bio {
-  font-size: 0.85rem;
+  font-size: 1rem; /* Increased font size */
   color: #e0e0e0;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limit bio to 2 lines */
+  -webkit-line-clamp: 3; /* Allow more lines for bio */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

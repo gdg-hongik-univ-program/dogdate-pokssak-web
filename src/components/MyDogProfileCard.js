@@ -1,7 +1,7 @@
 import React from 'react';
-import './DogProfileCard.css';
+import './MyDogProfileCard.css';
 
-const DogProfileCard = ({ dog, onClick }) => {
+const MyDogProfileCard = ({ dog, onClick }) => {
   if (!dog) {
     return null; // or a loading/placeholder component
   }
@@ -16,7 +16,7 @@ const DogProfileCard = ({ dog, onClick }) => {
         alt={dog.name}
         className="dog-card-background-image"
       />
-      <div className="dog-card-content">
+      <div className="my-dog-content">
         <h3 className="dog-name">{dog.name}</h3>
         <p className="dog-details">{dog.breed} / {dog.age}살</p>
         {dog.city && dog.district && (
@@ -29,4 +29,4 @@ const DogProfileCard = ({ dog, onClick }) => {
   );
 };
 
-export default DogProfileCard;
+export default MyDogProfileCard;

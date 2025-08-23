@@ -18,6 +18,13 @@
 }
 
 .section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+.hall-of-fame-title {
   font-size: 2rem;
   font-weight: 700;
   margin: 0;
@@ -49,19 +56,18 @@
 }
 
 .my-dog-profile-wrapper {
-    display: flex;
-    justify-content: center;
-    padding: 0 1rem; /* 좌우 여백 추가 */
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+  display: flex;
+  justify-content: center;
+  width: 300px; /* 1.5 times the standard dog-card width */
+  height: 281.25px; /* 1.5 times the standard dog-card height */
+  padding: 1.5rem 0; /* 여백도 함께 키워 더 시원한 느낌으로 */
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  margin: 0 auto;
 }
 
 .my-dog-profile-wrapper:hover {
     transform: scale(1.02);
-}
-
-.my-dog-profile-wrapper .dog-profile-card {
-    width: 100%;
 }
 
 .dog-list-scroll-container {
@@ -85,11 +91,11 @@
     gap: 1rem; /* 카드 사이 간격 */
     padding: 0 1rem; /* Add horizontal padding to the list itself */
 }
-
+  
 .dog-card {
   position: relative; /* For positioning children */
-  flex: 0 0 150px; /* 각 카드의 너비를 150px로 고정 */
-  width: 150px;
+  /* flex: 0 0 150px; */ /* Removed fixed size */
+  /* width: 150px; */ /* Removed fixed size */
   aspect-ratio: 1 / 1.25; /* 세로가 약간 긴 카드 비율 */
   background-color: #f0f0f0; /* Fallback color */
   border-radius: 12px;
@@ -99,10 +105,12 @@
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.dog-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+.dog-list .dog-card {
+  flex: 0 0 150px; /* Fixed size for list items */
+  width: 150px;
 }
+
+
 
 .dog-card-background-image {
   position: absolute;

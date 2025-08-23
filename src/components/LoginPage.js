@@ -22,7 +22,7 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch(` ${BASE_URL}/api/users/login`, {
+      const response = await fetch(`${BASE_URL}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
