@@ -1,0 +1,60 @@
+/* src/components/DogInfoForm.css */
+.photo-upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.photo-upload-box {
+  width: 8rem; /* w-32 */
+  height: 8rem; /* h-32 */
+  background-color: #d1d5db; /* neutral-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #9ca3af; /* neutral-400 */
+  cursor: pointer;
+}
+
+.photo-upload-box .fa-plus {
+  font-size: 2rem; /* text-3xl */
+  color: #ffffff;
+}
+
+.photo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.photo-upload-label {
+  font-size: 0.875rem; /* text-sm */
+  color: #4b5563; /* neutral-600 */
+}
+
+.toggle-container {
+  display: flex;
+  background-color: #f3f4f6; /* neutral-100 */
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 0.25rem;
+}
+
+.toggle-button {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem; /* rounded-md */
+  border: none;
+  background-color: transparent;
+  color: #4b5563; /* neutral-600 */
+  font-size: 0.875rem; /* text-sm */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.toggle-button.active {
+  background-color: #111827; /* neutral-900 */
+  color: #ffffff;
+}

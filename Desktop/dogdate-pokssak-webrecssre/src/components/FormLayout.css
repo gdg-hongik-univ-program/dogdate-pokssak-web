@@ -1,0 +1,161 @@
+/* src/components/FormLayout.css */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap');
+
+.form-layout-container {
+  background-color: #D2B48C;
+  min-height: 97vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 420px; /* 모바일 화면 너비 기준 */
+  margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
+  border-radius: 12px; /* 둥근 모서리 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+}
+
+.header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.logo-container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #374151; /* neutral-700 */
+  cursor: pointer;
+}
+
+.app-title {
+  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  font-size: 4.0rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-align: center;
+  margin: 6rem 0 2rem 0;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+  font-size: 1.5rem;
+  color: #111827;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.content {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.login-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border: 1px solid #f3f4f6;
+  margin-top: 0.5rem;
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem; /* text-sm */
+  color: #374151; /* neutral-700 */
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input, .select, .textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db; /* neutral-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-color: white;
+  box-sizing: border-box;
+}
+
+.input-wrapper .input {
+  padding-right: 3rem;
+}
+
+.input-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #85593A;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #6b7280; /* ring-2 ring-neutral-500 */
+}
+
+.textarea {
+  resize: none;
+}
+
+.bottom-action {
+  padding-top: 1.5rem;
+  margin-top: auto; /* Push to the bottom */
+}
+
+.submit-button {
+  width: 100%;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+}
+
+.link-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.link-text a {
+  color: #111827;
+  text-decoration: underline;
+}

@@ -1,0 +1,183 @@
+/* ============================================= */
+/* Design System Variables (기존과 동일)      */
+/* ============================================= */
+:root {
+  --color-surface: #ffffff;
+  --color-primary-accent: #85593A;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-on-accent: #ffffff;
+  --color-action-accept: #E91E63; /* Sophisticated Pink */
+  --color-action-reject: #9E9E9E; /* Modern Gray */
+  --color-action-match: #D2B48C; /* Hall of Fame Tan */
+
+  --radius-sm: 0.5rem;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+  --radius-circle: 50%;
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================= */
+/* Match Page Styles (최종 수정)            */
+/* ============================================= */
+
+.match-page-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* ▼ 카드를 상단으로 정렬 */
+  align-items: center;
+  padding: 0 1rem 1rem; /* ▼ 상단 패딩만 제거 */
+  box-sizing: border-box;
+  background: linear-gradient(90deg, rgba(210, 180, 140, 0.1) 0%, rgba(210, 180, 140, 0.05) 50%, rgba(210, 180, 140, 0.1) 100%);
+  border-radius: 12px; /* Added for rounded corners */
+}
+
+
+.card-container {
+  width: 100%;
+  max-width: 400px;
+  height:80%;
+  position: relative; /* ▼ 필수: absolute 버튼의 기준점 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.match-page-card-wrapper {
+  width: 85%;
+  height: 85%;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.5s ease-in-out;
+  transform-style: preserve-3d;
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.match-page-card-wrapper:hover {
+  transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+}
+
+.dog-profile-card-horizontal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+.dog-profile-card-horizontal > div {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dog-profile-card-horizontal img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-md, 12px);
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 0.5rem; /* Adjusted margin-top to bring buttons closer */
+}
+
+.action-button {
+  width: 64px;
+  height: 64px;
+  border: none;
+  border-radius: var(--radius-circle);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-button .button-text {
+  display: none; /* 텍스트 숨기기 */
+}
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.action-button:hover::before {
+  left: 100%;
+}
+
+.action-button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:active {
+  transform: translateY(-2px) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+.action-button.like {
+  background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);
+  color: #ffffff;
+}
+
+.action-button.like:hover {
+  background: linear-gradient(135deg, #C2185B 0%, #AD1457 100%);
+  box-shadow: 0 8px 30px rgba(233, 30, 99, 0.3), 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-button.dislike {
+  background: linear-gradient(135deg, #9E9E9E 0%, #757575 100%);
+  color: #ffffff;
+}
+
+.action-button.dislike:hover {
+  background: linear-gradient(135deg, #757575 0%, #616161 100%);
+  box-shadow: 0 8px 30px rgba(158, 158, 158, 0.25), 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-button.match {
+  background: linear-gradient(135deg, #D2B48C 0%, #BFA76F 100%);
+  color: #ffffff;
+}
+
+.action-button.match:hover {
+  background: linear-gradient(135deg, #BFA76F 0%, #A69659 100%);
+  box-shadow: 0 8px 30px rgba(210, 180, 140, 0.3), 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.no-more-cards {
+  text-align: center;
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  margin-top: 2rem;
+}

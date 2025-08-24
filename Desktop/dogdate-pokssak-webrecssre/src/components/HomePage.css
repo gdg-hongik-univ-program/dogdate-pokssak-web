@@ -1,0 +1,508 @@
+/* src/components/HomePage.css */
+.home-container {
+    padding: 1rem;
+    background: linear-gradient(90deg, rgba(210, 180, 140, 0.1) 0%, rgba(210, 180, 140, 0.05) 50%, rgba(210, 180, 140, 0.1) 100%);
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-radius: 12px; /* Added for rounded corners */
+}
+
+/* 내 강아지 섹션 */
+.my-dog-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1;
+  color: #555555;
+  padding: 0 2rem;
+}
+
+/* 아이콘이 있는 섹션 제목 - 텍스트 먼저, 아이콘 뒤에 */
+.section-title-with-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  flex-direction: row-reverse; /* 아이콘이 HTML에서 먼저 나오지만 텍스트가 화면에서 먼저 */
+  width: auto;
+}
+
+.section-icon {
+  font-size: 1.4rem;
+}
+
+/* 섹션 헤더와 스크롤 컨트롤 */
+.section-header-with-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 2rem;
+}
+
+/* 헤더 컨트롤 안의 제목은 추가 패딩 제거 */
+.section-header-with-controls .section-title {
+  padding: 0;
+}
+
+/* 위치순 섹션 제목을 사진과 같은 위치에서 시작하게 조정 */
+.location-section .section-title {
+  margin-left: 0;
+  padding: 0 2rem; /* 사진과 정확히 같은 패딩 */
+}
+
+.scroll-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* 강아지 리스트 래퍼 */
+.dog-list-wrapper {
+  position: relative;
+}
+
+/* 위치순 섹션 오버레이 버튼을 헤더 위치로 이동 */
+.location-section .scroll-overlay-btn {
+  position: absolute;
+  top: -4rem;
+  transform: none;
+  background: none;
+  border: none;
+  color: #374151;
+  font-size: 2rem;
+  font-weight: 900;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.location-section .scroll-overlay-left {
+  right: 5rem;
+}
+
+.location-section .scroll-overlay-right {
+  right: 2rem;
+}
+
+/* 위치순 섹션 호버 시 버튼 표시 */
+.location-section:hover .scroll-overlay-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.location-section .scroll-overlay-btn:hover {
+  color: #1f2937;
+  transform: scale(1.1);
+  text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.9);
+}
+
+/* 기존 스크롤 컨트롤도 호버 시에만 표시 (��트순 섹션용) */
+.section-header-with-controls .scroll-controls {
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.hall-of-fame-section:hover .scroll-controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 기존 버튼들을 볼드 화살표 스타일로 변경 */
+.scroll-btn {
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  color: #374151 !important;
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  box-shadow: none !important;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+.scroll-btn:hover {
+  background: none !important;
+  color: #1f2937 !important;
+  transform: scale(1.1) !important;
+  text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.9) !important;
+  box-shadow: none !important;
+}
+
+/* 작은 화면에서는 오버레이 버튼 숨기기 */
+@media (max-width: 480px) {
+  .scroll-overlay-btn {
+    display: none;
+  }
+
+  .scroll-controls {
+    display: none;
+  }
+}
+
+/* 위치순 섹�� 색상 테�� */
+.location-section {
+  position: relative;
+  background: linear-gradient(90deg, rgba(210, 180, 140, 0.1) 0%, rgba(210, 180, 140, 0.05) 50%, rgba(210, 180, 140, 0.1) 100%);
+  padding: 1.5rem 0;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.location-icon {
+  color: #475569; /* 모던한 슬레이트 그레이 */
+  filter: drop-shadow(0 1px 2px rgba(71, 85, 105, 0.15));
+}
+
+.location-section .section-title {
+  color: #475569;
+}
+
+/* 하트순 섹션 색상 테마 */
+.likes-section {
+  position: relative;
+  background: linear-gradient(90deg, rgba(210, 180, 140, 0.1) 0%, rgba(210, 180, 140, 0.05) 50%, rgba(210, 180, 140, 0.1) 100%);
+  padding: 1.5rem 0;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.likes-icon {
+  color: #374151; /* 모던한 다크 그레이 */
+  filter: drop-shadow(0 1px 2px rgba(55, 65, 81, 0.15));
+}
+
+.likes-section .section-title {
+  color: #374151;
+}
+
+/* 순위 뱃지 - 1등 하트만 */
+.rank-badge.first-place {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  font-size: 1.4rem;
+  color: #dc2626;
+  z-index: 5;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 2px 4px rgba(220, 38, 38, 0.3));
+}
+
+.hall-of-fame-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  text-align: center;
+}
+
+.settings-button {
+  background: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  padding: 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.4rem;
+  width: 2.4rem;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.settings-button:hover {
+  background: #bdbdbd;
+}
+
+.settings-button-on-card {
+  position: absolute;
+  top: 2.5rem;
+  right: 3rem;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.15); /* 미묘한 반투명 배경 */
+  backdrop-filter: blur(10px); /* 블러 효과 */
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.settings-button-on-card:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+/* 멍예의 ���당 섹��� 공통 스타일 */
+/* 내 강아지 섹션과 명예의전당 구분 */
+.my-dog-section {
+  padding-bottom: 2rem;
+  position: relative;
+}
+
+.my-dog-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  right: 1rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+}
+
+/* 명예의전당 컨테이너 */
+.hall-of-fame-container {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin-top: 2rem;
+  position: relative;
+  box-shadow: none;
+  border: none;
+}
+
+/* 트로피 아이콘 - 숨김 */
+.trophy-icon {
+  display: none;
+}
+
+.trophy-left {
+  left: 1.5rem;
+  transform: rotate(-12deg);
+}
+
+.trophy-right {
+  right: 1.5rem;
+  transform: rotate(12deg);
+}
+
+.hall-of-fame-container:hover .trophy-icon {
+  opacity: 0.8;
+  color: #a67c00; /* 호버 시 더 밝은 골드 */
+}
+
+
+
+/* 트로피 떠다��는 애니메이션 */
+
+
+/* 왕관 아이콘 */
+.crown-icon-container {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.crown-icon {
+  font-size: 2.5rem;
+  color: #D2B48C; /* 명예의전당과 어울리는 갈색 */
+  filter: drop-shadow(0 2px 6px rgba(210, 180, 140, 0.4));
+  transition: all 0.3s ease;
+}
+
+.crown-icon:hover {
+  color: #BFA76F;
+  transform: scale(1.1);
+  filter: drop-shadow(0 4px 10px rgba(210, 180, 140, 0.6));
+}
+
+/* 명예의전당 제목 강화 */
+.hall-of-fame-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1;
+  text-align: center;
+  color: #1f2937; /* 모던한 다크 그레이 */
+  letter-spacing: -0.02em;
+}
+
+.hall-of-fame-section {
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+}
+
+.my-dog-profile-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 350px; /* 더 크고 정사각형으로 */
+  height: 350px; /* 정사각형으로 width와 동일하게 */
+  padding: 1.5rem 0; /* 여백도 함께 ���워 더 ��원한 �������으로 */
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  margin: 0 auto;
+}
+
+.my-dog-title-container {
+  text-align: center;
+  margin: 2rem 0 1.5rem 0;
+}
+
+.my-dog-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  color: #333;
+  position: relative;
+}
+
+.my-dog-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5.5rem; /* "내 강아지" 글자 길이에 맞춤 */
+  height: 2px;
+  background: #333;
+  border-radius: 1px;
+}
+
+.my-dog-profile-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.dog-list-scroll-container {
+    overflow-x: scroll; /* 가로 스크롤 */
+    -webkit-overflow-scrolling: touch; /* iOS 스크롤 부드���게 */
+    padding: 0.5rem 0 1rem 0; /* Add some padding for aesthetics */
+    scroll-behavior: smooth; /* 부드러운 스크롤 */
+}
+
+/* 스크롤바 완전히 숨기기 */
+.dog-list-scroll-container::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+.dog-list-scroll-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.dog-list {
+    display: flex;
+    gap: 1rem; /* 카드 사이 간격 */
+    padding: 0 2rem; /* 명예의전당 컨테이너 ��부에서 더 큰 패딩 */
+}
+
+/* 카드 기본 상태 - 애니메이션 제거 */
+.dog-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+  
+.dog-card {
+  position: relative; /* For positioning children */
+  /* flex: 0 0 150px; */ /* Removed fixed size */
+  /* width: 150px; */ /* Removed fixed size */
+  aspect-ratio: 1 / 1.25; /* 세로가 약간 긴 카드 비율 */
+  background-color: #f0f0f0; /* Fallback color */
+  border-radius: 16px; /* 더 둥근 모서리 */
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.06); /* 더 세련된 그림자 */
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* ���드러운 애니메이션 */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* 미묘한 ���두리 */
+}
+
+.dog-list .dog-card {
+  flex: 0 0 150px; /* Fixed size for list items */
+  width: 150px;
+}
+
+
+
+.dog-card-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill; /* 박스를 완전히 채움 */
+  z-index: 1;
+  transition: transform 0.4s ease; /* 이미지 애니메이션 */
+}
+
+.dog-card:hover .dog-card-background-image {
+  transform: scale(1.05); /* 호버 시 이미지 확대 */
+}
+
+.dog-card:hover {
+  transform: translateY(-6px) scale(1.03); /* 더 역동적인 호버 효과 */
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15), 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.dog-card:hover .rank-badge.first-place {
+  transform: scale(1.1);
+  color: #b91c1c;
+  filter: drop-shadow(0 2px 6px rgba(220, 38, 38, 0.5));
+}
+
+/* 순위 뱃지 트랜지션 */
+.rank-badge.first-place {
+  transition: all 0.3s ease;
+}
+
+.dog-card-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Push content to the bottom */
+  padding: 0.75rem;
+  box-sizing: border-box;
+  /* 더 세련된 ���라데이션 배경 */
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.35) 50%,
+    rgba(0, 0, 0, 0.1) 80%,
+    transparent 100%
+  );
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.6); /* 더 선명한 텍스트 그림자 */
+}
+
+.dog-card .dog-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dog-card .dog-details {
+  font-size: 0.75rem;
+  color: #e0e0e0;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.dog-card .dog-extra-info {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-top: 0.25rem;
+}
