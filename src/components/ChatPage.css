@@ -1,129 +1,143 @@
-/* src/components/ChatPage.css */
+/* src/components/ChatPage.css - KakaoTalk Message Style */
 
 .chat-page-container {
-
   display: flex;
   flex-direction: column;
-  
   height: 100%;
-  
-  max-width: 420px; /* 모바일 화면 너비 기준 */
-  
-  
-  border-radius: 12px; /* 둥근 모서리 */
-  
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-  
-  overflow: hidden; /* 내용이 넘칠 경우 숨김 */
-  
-  background-color: #D2B48C;
-  
-  }
-  
-  
-  
-  .chat-header {
-  
-  padding: 1rem;
-  
-  border-bottom: 1px solid #e5e7eb; /* neutral-200 */
-  
-  background-color: #f7f7f7; /* Light background for header */
-  
-  text-align: center;
-  
-  font-size: 1.125rem; /* text-lg */
-  
-  color: #111827; /* neutral-900 */
-  
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(210, 180, 140, 0.15);
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(210, 180, 140, 0.1) 0%, rgba(210, 180, 140, 0.05) 50%, rgba(210, 180, 140, 0.1) 100%);
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+.chat-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: none;
+  background: #ffffff;
+  text-align: left;
+  font-size: 1.125rem;
+  color: #1f2937;
   font-weight: 600;
-  
-  }
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
 
 .chat-header h2 {
-  font-size: 1rem; /* Smaller font size for nickname */
+  font-size: 1.1rem;
   margin: 0;
+  color: #374151;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
   
   
   
-  .chat-messages {
-  
+.chat-messages {
   flex-grow: 1;
-  
   padding: 1rem;
-  
   overflow-y: auto;
-  
   display: flex;
-  
   flex-direction: column;
-  
-  gap: 0.75rem; /* Increased space between messages */
-  
-  }
-  
-  
-  
-  .message {
-  
+  gap: 0.5rem;
+}
+
+.message {
   display: flex;
-  
-  }
-  
-  
-  
-  .message.sent {
-  
+  margin-bottom: 0.3rem;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.message.sent {
   justify-content: flex-end;
-  
-  }
-  
-  
-  
-  .message.received {
-  
+  flex-direction: row;
+}
+
+.message.received {
   justify-content: flex-start;
-  
-  }
-  
-  
-  
-  .message-content {
-  
-  padding: 0.85rem 1.1rem; /* Increased padding */
-  
-  border-radius: 0.75rem; /* Slightly more rounded */
-  
-  max-width: 85%; /* Increased max-width for better readability */
-  
-  word-wrap: break-word; /* Break long words */
-  
-  font-size: 1rem; /* Increased font size */
-  
-  line-height: 1.5; /* Added line-height for better readability */
-  
-  }
-  
-  
-  
-  .message.sent .message-content {
-  
-  background-color: #111827; /* Primary action color */
-  
+  flex-direction: row;
+}
+
+.message-content {
+  padding: 0.15rem 0.5rem;
+  max-width: 70%;
+  word-wrap: break-word;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  position: relative;
+}
+
+/* KakaoTalk style message bubbles with tails */
+.message.sent .message-content {
+  background-color: #111827;
   color: white;
-  
-  }
-  
-  
-  
-  .message.received .message-content {
-  
-  background-color: #ffffff; /* Changed for better contrast */
-  
-  color: #111827; /* Changed for better contrast */
-  
-  }
+  border-radius: 18px 4px 18px 18px;
+  margin-right: 0.3rem;
+}
+
+.message.sent .message-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -6px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-left-color: #111827;
+  border-right: 0;
+  border-top: 0;
+  margin-top: 6px;
+}
+
+.message.received .message-content {
+  background-color: #ffffff;
+  color: #111827;
+  border-radius: 4px 18px 18px 18px;
+  margin-left: 0.3rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message.received .message-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -6px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-right-color: #ffffff;
+  border-left: 0;
+  border-top: 0;
+  margin-top: 6px;
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: #666;
+  white-space: nowrap;
+  align-self: flex-end;
+  margin-bottom: 0.2rem;
+  user-select: none;
+}
+
+.message.sent .message-time {
+  order: -1;
+  margin-right: 0.2rem;
+}
+
+.message.received .message-time {
+  margin-left: 0.2rem;
+}
+
+.system-message {
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-align: center;
+  width: 100%;
+  margin: 0.5rem 0;
+}
   
   
   
@@ -143,76 +157,61 @@
   
   
   
-  .chat-input-form {
-  
+.chat-input-form {
   display: flex;
-  
-  padding: 1rem;
-  
-  border-top: 1px solid #e5e7eb; /* neutral-200 */
-  
-  background-color: #f7f7f7; /* Light background for input area */
-  
-  }
-  
-  
-  
-  .chat-input-form input {
-  
+  padding: 0.8rem 1rem;
+  border-top: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.chat-input-form input {
   flex-grow: 1;
-  
-  padding: 0.75rem 1rem;
-  
-  border: 1px solid #d1d5db; /* neutral-300 */
-  
-  border-radius: 0.5rem; /* rounded-lg */
-  
-  background-color: white;
-  
+  padding: 0.7rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  background-color: #f8f9fa;
   box-sizing: border-box;
-  
-  }
-  
-  
-  
-  .chat-input-form input:focus {
-  
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.chat-input-form input:focus {
   outline: none;
-  
-  border-color: transparent;
-  
-  box-shadow: 0 0 0 2px #6b7280; /* ring-2 ring-neutral-500 */
-  
-  }
-  
-  
-  
-  .chat-input-form button {
-  
-  margin-left: 0.75rem;
-  
-  padding: 0.75rem 1rem;
-  
+  border-color: #111827;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 1px #111827;
+}
+
+.chat-input-form input::placeholder {
+  color: #9ca3af;
+}
+
+.chat-input-form button {
+  padding: 0.7rem;
   border: none;
-  
-  background-color: #111827; /* Primary action color */
-  
+  background-color: #111827;
   color: white;
-  
-  border-radius: 0.5rem;
-  
+  border-radius: 50%;
   cursor: pointer;
-  
   font-weight: 600;
-  
-  transition: background-color 0.2s ease-in-out;
-  
-  }
-  
-  
-  
-  .chat-input-form button:hover {
-  
-  background-color: #2d3748; /* Darker shade on hover */
-  
-  }
+  transition: all 0.2s ease;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.chat-input-form button:hover {
+  background-color: #374151;
+  transform: scale(1.05);
+}
+
+.chat-input-form button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+}

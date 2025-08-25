@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import DogProfileCard from './DogprofileCard';
+import { HiCheckCircle, HiXCircle } from "react-icons/hi2";
 import './LikesPage.css';
 
-// --- 가짜 데이터 ---
 const fakeSentRequests = [
   {
     id: 1,
@@ -16,7 +16,7 @@ const fakeSentRequests = [
       gender: '남아',
       city: '경기',
       district: '성남시',
-      bio: '작지만 용감한 레오! 다른 강아지 친구들과 어울리는 걸 좋아해요.',
+      bio: '작지만 용감한 레오! 다른 강아지 친구들과 ��울리는 걸 좋아해요.',
       imageUrl: 'https://images.unsplash.com/photo-1598875184988-5e67b1a874b8?q=80&w=800',
       likes: 110
     }
@@ -73,7 +73,6 @@ const fakeReceivedRequests = [
     }
   }
 ];
-// --- 가짜 데이터 끝 ---
 
 const LikesPage = () => {
   const { openModal } = useOutletContext();
@@ -84,11 +83,11 @@ const LikesPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // 백엔드 연결 대신 가짜 데이터를 사용합니다.
+    // 실제 백엔드 API를 연결해야 합니다.
     setIsLoading(true);
     setTimeout(() => {
-      setSentRequests(fakeSentRequests);
-      setReceivedRequests(fakeReceivedRequests);
+      setSentRequests([]);
+      setReceivedRequests([]);
       setIsLoading(false);
     }, 500); // 0.5초 로딩 효과
   }, []);
@@ -120,13 +119,13 @@ const LikesPage = () => {
           className={`toggle-btn ${activeTab === 'sent' ? 'active' : ''}`}
           onClick={() => setActiveTab('sent')}
         >
-          내가 매칭 신청한 사람
+          보낸 요청
         </button>
         <button
           className={`toggle-btn ${activeTab === 'received' ? 'active' : ''}`}
           onClick={() => setActiveTab('received')}
         >
-          나한테 매칭 보낸사람
+          받은 요청
         </button>
       </div>
       <div className="likes-list-vertical">
@@ -143,13 +142,40 @@ const LikesPage = () => {
             }
             return (
               <div key={request.id} className="match-request-item">
-                <DogProfileCard dog={request.dog} onClick={() => openModal({ dog: request.dog, user: { nickname: activeTab === 'sent' ? request.toUserNickname : request.fromUserNickname }})} />
-                {activeTab === 'received' && (
-                  <div className="match-request-actions">
-                    <button onClick={() => handleAccept(request)}>수락</button>
-                    <button onClick={() => handleReject(request)}>거절</button>
+                <div className="likes-dog-card-wrapper">
+                  <div className="dog-profile-card" onClick={() => openModal({ dog: request.dog, user: { nickname: activeTab === 'sent' ? request.toUserNickname : request.fromUserNickname }})}>
+                    <img
+                      src={request.dog.photoUrl || request.dog.imageUrl}
+                      alt={request.dog.name}
+                      className="dog-card-background-image"
+                    />
+                    <div className="my-dog-content">
+                      <div className="dog-info-layout">
+                        <div className="dog-info-left">
+                          <h3 className="dog-name">{request.dog.name}</h3>
+                          <p className="dog-details">{request.dog.breed} / {request.dog.age}살</p>
+                          {(request.dog.city && request.dog.district) && (
+                            <p className="dog-extra-info">{request.dog.city} {request.dog.district}</p>
+                          )}
+                          {request.dog.distance && <p className="dog-extra-info">{request.dog.distance} 이내</p>}
+                        </div>
+                        <div className="dog-info-right">
+                          <p className="dog-profile-bio">{request.dog.bio || '한 줄 소개가 아직 없습니다.'}</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                )}
+                  {activeTab === 'received' && (
+                    <div className="match-request-actions-overlay">
+                      <button className="action-btn accept-btn" onClick={() => handleAccept(request)}>
+                        <HiCheckCircle className="btn-icon" />
+                      </button>
+                      <button className="action-btn reject-btn" onClick={() => handleReject(request)}>
+                        <HiXCircle className="btn-icon" />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })

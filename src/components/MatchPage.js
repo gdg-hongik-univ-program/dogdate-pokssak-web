@@ -4,38 +4,6 @@ import { FaHeart, FaTimes, FaBolt } from 'react-icons/fa';
 import DogProfileCard from './DogprofileCard';
 import './MatchPage.css';
 
-// --- 가짜 데이터 ---
-const fakeMatches = [
-  {
-    id: 301,
-    nickname: '초코누나',
-    dog: {
-      id: 401, name: '초코', breed: '요크셔테리어', age: 5, gender: '남아', city: '부산', district: '해운대구', bio: '간식이라면 뭐든지 하는 먹보랍니다.', imageUrl: 'https://images.unsplash.com/photo-1554196409-c44b5b7d895f3?q=80&w=800', likes: 90
-    }
-  },
-  {
-    id: 302,
-    nickname: '마루형',
-    dog: {
-      id: 402, name: '마루', breed: '닥스훈트', age: 6, gender: '남아', city: '대구', district: '수성구', bio: '짧은 다리가 매력적인 마루입니다. 산책 메이트 구해요!', imageUrl: 'https://images.unsplash.com/photo-1529429617124-95b109e86bb8?q=80&w=800', likes: 80
-    }
-  },
-  {
-    id: 303,
-    nickname: '콩이언니',
-    dog: {
-      id: 403, name: '콩이', breed: '퍼그', age: 3, gender: '여아', city: '서울', district: '광진구', bio: '주름진 얼굴이 매력적인 콩이에요. 느긋한 산책을 즐겨요.', imageUrl: 'https://images.unsplash.com/photo-1534351450181-ea6f7d45e388?q=80&w=800', distance: '3km'
-    }
-  },
-  {
-    id: 304,
-    nickname: '별이맘',
-    dog: {
-      id: 404, name: '별이', breed: '치와와', age: 4, gender: '여아', city: '서울', district: '강동구', bio: '작은 몸집에 큰 용기를 가졌어요. 주인 껌딱지랍니다.', imageUrl: 'https://images.unsplash.com/photo-1601979031425-12f4a45978c6?q=80&w=800', distance: '4km'
-    }
-  }
-];
-// --- 가짜 데이터 끝 ---
 
 function MatchPage() {
   const { openModal } = useOutletContext();
@@ -47,9 +15,9 @@ function MatchPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    // 백엔드 통신 대신 가짜 데이터를 사용합니다.
+    // 실제 백엔드 API를 연결해야 합니다.
     setTimeout(() => {
-      setCharacters(fakeMatches);
+      setCharacters([]);
       setIsLoading(false);
     }, 500); // 0.5초 로딩 시뮬레이션
   }, []);

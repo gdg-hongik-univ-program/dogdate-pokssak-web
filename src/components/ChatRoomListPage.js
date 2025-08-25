@@ -44,7 +44,7 @@ const ChatRoomListPage = () => {
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
-      setChatRooms(fakeChatRooms);
+      setChatRooms([]);
       setIsLoading(false);
     }, 500); // 0.5초 로딩 시뮬레이션
   }, []);

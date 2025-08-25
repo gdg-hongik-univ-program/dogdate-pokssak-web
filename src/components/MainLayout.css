@@ -8,7 +8,7 @@
   height: 97vh;
   background-color: #ffffff;
   max-width: 420px; /* 모바일 화면 너비 기준 */
-  margin: 20px auto; /* 중앙 정렬 및 상하 여백 */
+  margin: 20px auto; /* 중앙 ��렬 및 상하 여백 */
   border-radius: 12px; /* 둥근 모서리 */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   overflow: hidden; /* 내용이 넘칠 경우 숨김 */
@@ -19,13 +19,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  background-color: #f3f4f6;
+  background-color: #ffffff;
   flex-wrap: wrap; /* Allow items to wrap if space is limited */
 }
 
 .main-header-title { /* 헤더 타이틀 스타일 */
   font-family: 'Inter', 'Noto Sans KR', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 900;
   color: #000000;
   text-align: center;
@@ -57,11 +57,42 @@
 }
 
 .logout-paw-icon {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
+  line-height: 1;
 }
 
 .logout-text {
   white-space: nowrap;
+}
+
+/* 큰 발바닥 아이콘 로그아웃 버튼 */
+.paw-logout-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  color: #85593A;
+  min-width: 3.5rem;
+}
+
+.paw-logout-button:hover {
+  background: rgba(133, 89, 58, 0.1);
+  transform: scale(1.05);
+}
+
+.logout-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #85593A;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .logout-button { /* 로그아웃 버튼 스타일 */

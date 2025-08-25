@@ -49,13 +49,6 @@ function LoginPage() {
     await loginUser(formData.userId, formData.password);
   };
 
-  // --- 로그인 우회 핸들러 ---
-  const handleDevLoginBypass = () => {
-    // 1. 다른 페이지에서 사용할 임시 사용자 ID를 저장합니다.
-    localStorage.setItem('userId', 'dev-user');
-    // 2. 서버 통신 없이 즉시 홈 화면으로 이동합니다.
-    navigate('/app/home');
-  };
 
   return (
     <div className="form-layout-container">
@@ -89,9 +82,6 @@ function LoginPage() {
             />
             <div className="bottom-action">
               <button type="submit" className="submit-button">로그인</button>
-              <button type="button" onClick={handleDevLoginBypass} className="submit-button" style={{backgroundColor: '#4CAF50', marginTop: '10px'}}>
-                개발용 자동 로그인
-              </button>
             </div>
           </form>
           <p className="link-text">

@@ -5,6 +5,7 @@ import ChatPage from './components/ChatPage';
 import ChatRoomListPage from './components/ChatRoomListPage';
 
 // 페이지 컴포넌트 임포트
+import WelcomePage from './components/WelcomePage';
 import LoginPage from './components/LoginPage';
 import UserInfoForm from './components/UserInfoForm';
 import DogInfoForm from './components/DogInfoForm';
@@ -27,8 +28,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* 1. 앱 시작 시 /login 페이지로 자동 이동 */}
-        <Route path="/" element={<Navigate replace to="/app/home" />} />
+        {/* 1. 앱 시작 시 임시 홈 화면 표시 */}
+        <Route path="/" element={<WelcomePage />} />
+
         {/* 2. 로그인 및 회원가입 관련 페이지 */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup-user" element={<UserInfoForm />} />

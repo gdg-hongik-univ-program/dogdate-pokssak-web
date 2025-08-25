@@ -14,8 +14,8 @@ const TiltableDogCard = ({ dog, onClick, children }) => {
     const mouseX = e.clientX - centerX;
     const mouseY = e.clientY - centerY;
 
-    const rotateX = (mouseY / (height / 2)) * -15; // Max 15deg rotation
-    const rotateY = (mouseX / (width / 2)) * 15;  // Max 15deg rotation
+    const rotateX = (mouseY / (height / 2)) * -10; // Max 10deg rotation
+    const rotateY = (mouseX / (width / 2)) * 10;  // Max 10deg rotation
 
     setTransformStyle({
       transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`,
