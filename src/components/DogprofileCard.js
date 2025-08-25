@@ -2,12 +2,19 @@ import React from 'react';
 import './DogProfileCard.css';
 
 const DogProfileCard = ({ dog, onClick }) => {
+  // dog 객체가 없으면 아무것도 렌더링하지 않습니다.
   if (!dog) {
-    return null; // or a loading/placeholder component
+    return null;
   }
 
-  // 성별 표시를 '남아'/'여아'로 통일
+  // 성별 표시를 '남아'/'여아'로 통일합니다.
   const displayGender = dog.gender === 'male' || dog.gender === '남아' || dog.gender === '수컷' ? '남아' : '여아';
+
+  // --- 수정된 부분 ---
+  // 서버에서 오는 'description'을 우선적으로 사용하고,
+  // 혹시 모를 'bio' 속성도 확인합니다.
+  const bioText = dog.description || dog.bio || 'tlqkffusdk.';
+  // --- 여기까지 수정 ---
 
   return (
     <div className="dog-profile-card" onClick={onClick}>
@@ -23,7 +30,8 @@ const DogProfileCard = ({ dog, onClick }) => {
           <p className="dog-extra-info">{dog.city} {dog.district}</p>
         )}
         {dog.distance && <p className="dog-extra-info">{dog.distance} 이내</p>}
-        <p className="dog-profile-bio">{dog.bio || '한 줄 소개가 아직 없습니다.'}</p>
+        {/* 수정된 bioText 변수를 사용합니다. */}
+        <p className="dog-profile-bio">{bioText}</p>
       </div>
     </div>
   );

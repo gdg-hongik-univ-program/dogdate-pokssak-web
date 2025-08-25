@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import { HiCheckCircle, HiXCircle } from "react-icons/hi2";
 import './LikesPage.css';
 import { BASE_URL } from '../config';
+import DogProfileCard from './DogprofileCard'; // DogProfileCard 컴포넌트를 임포트합니다.
 
 const LikesPage = () => {
   const { openModal } = useOutletContext();
@@ -36,45 +37,32 @@ const LikesPage = () => {
         const sentData = await sentResponse.json();
         const receivedData = await receivedResponse.json();
 
-        const sentToUserIds = new Set(sentData.map(req => req.toUserId));
-
-        const filteredReceivedData = receivedData.filter(req => !sentToUserIds.has(req.fromUserId));
-
-        const fetchDogForRequest = async (request) => {
-          const otherUserId = activeTab === 'sent' ? request.toUserId : request.fromUserId;
-          const otherUserNickname = activeTab === 'sent' ? request.toUserNickname : request.fromUserNickname;
-        
-          console.log(`LikesPage: fetchDogForRequest for otherUserId: ${otherUserId}, Nickname: ${otherUserNickname}`);
+        const fetchDogForRequest = async (request, type) => {
+          const otherUserId = type === 'sent' ? request.toUserId : request.fromUserId;
+          const otherUserNickname = type === 'sent' ? request.toUserNickname : request.fromUserNickname;
         
           if (!otherUserId) {
-            console.log(`LikesPage: No otherUserId found for request:`, request);
             return { ...request, dog: null, otherUserNickname };
           }
         
           try {
             const dogResponse = await fetch(`${BASE_URL}/api/dogs/users/${otherUserId}`, { headers });
-            console.log(`LikesPage: Dog API response for ${otherUserId} ok: ${dogResponse.ok}`);
         
             if (dogResponse.ok) {
               const dogs = await dogResponse.json();
-              console.log(`LikesPage: Dogs data for ${otherUserId}:`, dogs);
               const dog = dogs[0] || null;
-              console.log(`LikesPage: Final dog object for ${otherUserId}:`, dog);
               return { ...request, dog, otherUserNickname };
             } else {
-              const errorText = await dogResponse.text();
-              console.error(`LikesPage: Failed to fetch dog for ${otherUserId}: ${dogResponse.status} - ${errorText}`);
               return { ...request, dog: null, otherUserNickname };
             }
           } catch (err) {
-            console.error(`LikesPage: Error fetching dog for ${otherUserId}:`, err);
             return { ...request, dog: null, otherUserNickname };
           }
         };
 
         const [sentRequestsWithDogs, receivedRequestsWithDogs] = await Promise.all([
-          Promise.all(sentData.map(fetchDogForRequest)),
-          Promise.all(filteredReceivedData.map(fetchDogForRequest))
+          Promise.all(sentData.map(request => fetchDogForRequest(request, 'sent'))),
+          Promise.all(receivedData.map(request => fetchDogForRequest(request, 'received')))
         ]);
 
         setSentRequests(sentRequestsWithDogs);
@@ -89,7 +77,7 @@ const LikesPage = () => {
     };
 
     fetchRequests();
-  }, [userId, activeTab]);
+  }, [userId]);
 
   const handleAccept = async (request) => {
     if (!userId) {
@@ -193,8 +181,9 @@ const LikesPage = () => {
             return (
               <div key={request.id} className="match-request-item">
                 <div className="likes-dog-card-wrapper">
-                  <div
-                    className="dog-profile-card"
+                  {/* --- 수정된 부분: DogProfileCard 컴포넌트 사용 --- */}
+                  <DogProfileCard
+                    dog={request.dog}
                     onClick={() => openModal({
                       dog: request.dog,
                       user: {
@@ -202,27 +191,8 @@ const LikesPage = () => {
                         nickname: activeTab === 'sent' ? request.toUserNickname : request.fromUserNickname
                       }
                     })}
-                  >
-                    <img
-                      src={request.dog.photoUrl || request.dog.imageUrl}
-                      alt={request.dog.name}
-                      className="dog-card-background-image"
-                    />
-                    <div className="my-dog-content">
-                      <div className="dog-info-layout">
-                        <div className="dog-info-left">
-                          <h3 className="dog-name">{request.dog.name}</h3>
-                          <p className="dog-details">{request.dog.breed} / {request.dog.age}살</p>
-                          {(request.dog.city && request.dog.district) && (
-                            <p className="dog-extra-info">{request.dog.city} {request.dog.district}</p>
-                          )}
-                        </div>
-                        <div className="dog-info-right">
-                          <p className="dog-profile-bio">{request.dog.bio || '한 줄 소개가 아직 없습니다.'}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  />
+                  {/* --- 여기까지 수정 --- */}
                   {activeTab === 'received' && (
                     <div className="match-request-actions-overlay">
                       <button className="action-btn accept-btn" onClick={() => handleAccept(request)}>

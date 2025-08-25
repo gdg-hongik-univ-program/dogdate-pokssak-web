@@ -19,9 +19,12 @@ const ChatPage = () => {
   const stompClientRef = useRef(null);
   const messagesEndRef = useRef(null);
   const userId = localStorage.getItem('userId');
+  console.log('ChatPage: Initial userId from localStorage:', userId); // Added log
 
   useEffect(() => {
     const fetchInitialData = async () => {
+      // Moved log to ensure it always runs
+      console.log('Fetching initial chat data for chatroomId:', chatroomId, 'and userId:', userId);
       if (!userId) {
         setError("사용자 ID를 찾을 수 없습니다.");
         setIsLoading(false);
@@ -50,6 +53,7 @@ const ChatPage = () => {
         
         if (historyResponse.ok) {
           const history = await historyResponse.json();
+          console.log('Chat history API response:', history); // Added log
           setMessages(history);
           // If nickname not passed via state, try to get it from history
           if (!location.state?.otherUserNickname && history.length > 0 && fetchedNumericUserId !== null) {
@@ -65,6 +69,10 @@ const ChatPage = () => {
               }
             }
           }
+        } else { // Added error handling for historyResponse not ok
+          const errorText = await historyResponse.text();
+          console.error(`Failed to fetch chat history: ${historyResponse.status} ${historyResponse.statusText} - ${errorText}`);
+          setError("채팅 기록을 불러오는 데 실패했습니다.");
         }
 
         await fetch(`${BASE_URL}/api/chat/${chatroomId}/read?userId=${userId}`, {

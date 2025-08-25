@@ -23,7 +23,7 @@ const MyDogProfileCard = ({ dog, onClick }) => {
           <p className="dog-extra-info">{dog.city} {dog.district}</p>
         )}
         {dog.distance && <p className="dog-extra-info">{dog.distance} 이내</p>}
-        <p className="dog-profile-bio">{dog.bio || '한 줄 소개가 아직 없습니다.'}</p>
+        <p className="dog-profile-bio">{dog.description || '한 줄 소개가 아직 없습니다.'}</p>
       </div>
     </div>
   );

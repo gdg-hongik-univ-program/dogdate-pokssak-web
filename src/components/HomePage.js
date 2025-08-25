@@ -66,26 +66,64 @@ function HomePage() {
             const myDogsData = await myDogResponse.json();
             if (myDogsData && myDogsData.length > 0) {
               setMyDog(myDogsData[0]);
-            } else {
+            }
+            else {
               setMyDog(null);
             }
-        }
 
-        // 인기/주변 강아지는 임시 데이터 사용 (1번 코드처럼)
-        setPopularDogs([
-          { id: 1, name: '코코', breed: '말티즈', age: 2, imageUrl: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=800', likes: 120 },
-          { id: 2, name: '레오', breed: '포메라니안', age: 3, imageUrl: 'https://images.unsplash.com/photo-1598875184988-5e67b1a874b8?q=80&w=800', likes: 110 },
-          { id: 3, name: '보리', breed: '시츄', age: 4, imageUrl: 'https://images.unsplash.com/photo-1548681528-6a5c45b66b42?q=80&w=800', likes: 100 },
-          { id: 4, name: '초코', breed: '요크셔', age: 5, imageUrl: 'https://images.unsplash.com/photo-1554196409-c44b5b7895f3?q=80&w=800', likes: 90 },
-          { id: 5, name: '마루', breed: '닥스훈트', age: 6, imageUrl: 'https://images.unsplash.com/photo-1529429617124-95b109e86bb8?q=80&w=800', likes: 80 },
-        ]);
-        setNearbyDogs([
-          { id: 6, name: '해피', breed: '비글', age: 1, imageUrl: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=800', distance: '1km' },
-          { id: 7, name: '두부', breed: '프렌치 불독', age: 2, imageUrl: 'https://images.unsplash.com/photo-1597633425046-08f5110420b5?q=80&w=800', distance: '2km' },
-          { id: 8, name: '콩이', breed: '퍼그', age: 3, imageUrl: 'https://images.unsplash.com/photo-1534351450181-ea6f7d45e388?q=80&w=800', distance: '3km' },
-          { id: 9, name: '별이', breed: '치와와', age: 4, imageUrl: 'https://images.unsplash.com/photo-1601979031425-12f4a45978c6?q=80&w=800', distance: '4km' },
-          { id: 10, name: '밤비', breed: '푸들', age: 5, imageUrl: 'https://images.unsplash.com/photo-1585679104874-83d49a905a8e?q=80&w=800', distance: '5km' },
-        ]);
+            // 사용자 프로필 정보 가져오기 (도시 정보를 위해)
+            const userProfileResponse = await fetch(`${BASE_URL}/api/home/profile/${userId}`, {
+              headers: { 'ngrok-skip-browser-warning': 'true' }
+            });
+            if (!userProfileResponse.ok) {
+              throw new Error(`사용자 프로필 정보를 불러오는데 실패했습니다: ${userProfileResponse.statusText}`);
+            }
+            const userProfileData = await userProfileResponse.json();
+            const userCity = userProfileData.city;
+
+            // 우리 동네 강아지 (위치순) 가져오기
+            if (userCity) {
+              const nearbyDogsResponse = await fetch(`${BASE_URL}/api/home/regional-dogs/${userCity}?limit=10`, { // Increased limit for more dogs
+                headers: { 'ngrok-skip-browser-warning': 'true' }
+              });
+              if (nearbyDogsResponse.ok) {
+                const nearbyDogsData = await nearbyDogsResponse.json();
+                setNearbyDogs(nearbyDogsData.map(dog => ({
+                  id: dog.dogId,
+                  name: dog.dogName,
+                  breed: dog.breed,
+                  age: dog.age,
+                  imageUrl: dog.photoUrl,
+                  // distance는 API에서 제공되지 않으므로 임시로 빈 값 또는 계산 로직 필요
+                  distance: '' // API에서 제공되지 않음
+                })));
+              } else {
+                console.error(`Failed to fetch nearby dogs: ${nearbyDogsResponse.statusText}`);
+                setNearbyDogs([]);
+              }
+            } else {
+              setNearbyDogs([]);
+            }
+
+            // 하트순 강아지 가져오기
+            const popularDogsResponse = await fetch(`${BASE_URL}/api/home/dog-ranking?page=0&size=10`, {
+              headers: { 'ngrok-skip-browser-warning': 'true' }
+            });
+            if (popularDogsResponse.ok) {
+              const popularDogsData = await popularDogsResponse.json();
+              setPopularDogs(popularDogsData.map(dog => ({
+                id: dog.dogId,
+                name: dog.dogName,
+                breed: dog.breed,
+                age: dog.age,
+                imageUrl: dog.photoUrl,
+                likes: dog.likeCount
+              })));
+            } else {
+              console.error(`Failed to fetch popular dogs: ${popularDogsResponse.statusText}`);
+              setPopularDogs([]);
+            }
+        }
 
       } catch (err) {
         setError(err.message);

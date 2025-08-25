@@ -65,7 +65,31 @@ const ChatRoomListPage = () => {
             return { ...room, otherUserNickname: '알 수 없는 사용자' };
           }
         });
-        setChatRooms(chatRoomsWithNicknames);
+
+        // Fetch last message for each chatroom
+        const chatRoomsWithLastMessages = await Promise.all(chatRoomsWithNicknames.map(async (room) => {
+          try {
+            const lastMessageResponse = await fetch(`${BASE_URL}/api/chat/${room.id}/last-message`, {
+              headers: { 'ngrok-skip-browser-warning': 'true' },
+            });
+            if (lastMessageResponse.ok) {
+              const lastMessageData = await lastMessageResponse.json();
+              return { 
+                ...room, 
+                lastMessage: lastMessageData.content || '메시지 없음',
+                lastMessageTimestamp: lastMessageData.timestamp || null
+              };
+            } else {
+              console.warn(`Failed to fetch last message for chatroom ${room.id}: ${lastMessageResponse.status}`);
+              return { ...room, lastMessage: '메시지 없음', lastMessageTimestamp: null };
+            }
+          } catch (msgErr) {
+            console.error(`Error fetching last message for chatroom ${room.id}:`, msgErr);
+            return { ...room, lastMessage: '메시지 없음', lastMessageTimestamp: null };
+          }
+        }));
+
+        setChatRooms(chatRoomsWithLastMessages);
 
       } catch (err) {
         setError(err.message);
