@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, NavLink } from 'react-router-dom';
-import ProfileModal from './ProfileModal'; // ProfileModal 임포트
+import ProfileModal from './ProfileModal';
+import MatchModal from './MatchModal';
 import './MainLayout.css';
 
 const navItems = [
@@ -13,8 +14,11 @@ const navItems = [
 function MainLayout() {
   const navigate = useNavigate();
   const [selectedDog, setSelectedDog] = useState(null);
+  const [matchUserIds, setMatchUserIds] = useState(null);
 
   const handleLogout = () => {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('token');
     navigate('/login');
   };
 
@@ -26,6 +30,14 @@ function MainLayout() {
     setSelectedDog(null);
   };
 
+  const openMatchModal = (userIds) => {
+    setMatchUserIds(userIds);
+  };
+
+  const closeMatchModal = () => {
+    setMatchUserIds(null);
+  };
+
   return (
     <div className="main-layout">
       <header className="main-header">
@@ -35,7 +47,7 @@ function MainLayout() {
         </button>
       </header>
       <main className="main-content">
-        <Outlet context={{ openModal }} /> {/* openModal 함수를 context로 전달 */}
+        <Outlet context={{ openModal, openMatchModal }} />
       </main>
       <nav className="bottom-nav">
         {navItems.map((item) => (
@@ -48,8 +60,15 @@ function MainLayout() {
           </NavLink>
         ))}
       </nav>
-      {/* selectedDog가 있을 때만 ProfileModal을 렌더링 */}
       {selectedDog && <ProfileModal dog={selectedDog} onClose={closeModal} />}
+      {matchUserIds && (
+        <MatchModal 
+          isOpen={true} 
+          onClose={closeMatchModal} 
+          myUserId={matchUserIds.myUserId}
+          matchedUserId={matchUserIds.matchedUserId}
+        />
+      )}
     </div>
   );
 }

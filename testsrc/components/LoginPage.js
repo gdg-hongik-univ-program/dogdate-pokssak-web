@@ -49,13 +49,6 @@ function LoginPage() {
     await loginUser(formData.userId, formData.password);
   };
 
-  // --- 로그인 우회 핸들러 ---
-  const handleDevLoginBypass = () => {
-    // 1. 다른 페이지에서 사용할 임시 사용자 ID를 저장합니다.
-    localStorage.setItem('userId', 'dev-user');
-    // 2. 서버 통신 없이 즉시 홈 화면으로 이동합니다.
-    navigate('/app/home');
-  };
 
   return (
     <div className="form-layout-container">
@@ -97,7 +90,6 @@ function LoginPage() {
         </div>
       </main>
     </div>
-    
   );
 }
 

@@ -1,53 +1,82 @@
+// src/components/ChatRoomListPage.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../config';
 import './ChatRoomListPage.css';
-
-// --- 가짜 데이터 ---
-const fakeChatRooms = [
-  {
-    id: 1,
-    otherUserNickname: '코코 견주',
-    lastMessage: '네, 안녕하세요! 반갑습니다 😄',
-    lastMessageTimestamp: new Date(new Date().getTime() - 5 * 60000).toISOString(), // 5 minutes ago
-    otherUserImageUrl: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=800'
-  },
-  {
-    id: 2,
-    otherUserNickname: '레오 아빠',
-    lastMessage: '산책 같이 하실래요? 저희 강아지가 엄청 활발해요.',
-    lastMessageTimestamp: new Date(new Date().getTime() - 30 * 60000).toISOString(), // 30 minutes ago
-    otherUserImageUrl: 'https://images.unsplash.com/photo-1598875184988-5e67b1a874b8?q=80&w=800'
-  },
-  {
-    id: 3,
-    otherUserNickname: '보리 누나',
-    lastMessage: '사진 잘 봤어요! 너무 귀여워요ㅠㅠ',
-    lastMessageTimestamp: new Date(new Date().getTime() - 120 * 60000).toISOString(), // 2 hours ago
-    otherUserImageUrl: 'https://images.unsplash.com/photo-1548681528-6a5c45b66b42?q=80&w=800'
-  },
-  {
-    id: 4,
-    otherUserNickname: '해피 보호자',
-    lastMessage: '네 그럼 그때 뵐게요!',
-    lastMessageTimestamp: new Date(new Date().getTime() - 24 * 60 * 60000).toISOString(), // 1 day ago
-    otherUserImageUrl: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=800'
-  }
-];
-// --- 가짜 데이터 끝 ---
 
 const ChatRoomListPage = () => {
   const [chatRooms, setChatRooms] = useState([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const userId = localStorage.getItem('userId'); // Get userId from localStorage
 
   useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setChatRooms(fakeChatRooms);
-      setIsLoading(false);
-    }, 500); // 0.5초 로딩 시뮬레이션
-  }, []);
+    const fetchChatRooms = async () => {
+      if (!userId) {
+        setError('사용자 ID를 찾을 수 없습니다. 로그인해주세요.');
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        // 1. Fetch chatrooms
+        const response = await fetch(`${BASE_URL}/api/chat/users/${userId}/chatrooms`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'true',
+          },
+        });
+
+        const responseText = await response.text();
+        console.log("--- API 응답 (/api/chat/users/{userId}/chatrooms) ---");
+        console.log(responseText);
+
+        if (responseText.trim().startsWith('<')) {
+          throw new Error('서버에서 JSON이 아닌 HTML 응답을 받았습니다. 콘솔 로그를 확인하여 원인(예: 404, 500 에러)을 파악하세요.');
+        }
+
+        const chatroomData = JSON.parse(responseText);
+
+        // 2. Fetch matches
+        const matchesResponse = await fetch(`${BASE_URL}/api/matches/users/${userId}`, {
+          headers: { 'ngrok-skip-browser-warning': 'true' },
+        });
+        
+        const matchesText = await matchesResponse.text();
+        console.log("--- API 응답 (/api/matches/users/{userId}) ---");
+        console.log(matchesText);
+
+        if (matchesText.trim().startsWith('<')) {
+          throw new Error('서버에서 JSON이 아닌 HTML 응답을 받았습니다. 콘솔 로그를 확인하여 원인(예: 404, 500 에러)을 파악하세요.');
+        }
+
+        const matches = JSON.parse(matchesText);
+
+        // 3. Combine data
+        const chatRoomsWithNicknames = chatroomData.map(room => {
+          const correspondingMatch = matches.find(match => match.id === room.matchId);
+          if (correspondingMatch) {
+            const otherUserNickname = 
+              correspondingMatch.user1Id === parseInt(userId) 
+                ? correspondingMatch.user2Nickname 
+                : correspondingMatch.user1Nickname;
+            return { ...room, otherUserNickname };
+          } else {
+            return { ...room, otherUserNickname: '알 수 없는 사용자' };
+          }
+        });
+        setChatRooms(chatRoomsWithNicknames);
+
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching chat rooms:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChatRooms();
+  }, [userId]);
 
   if (isLoading) {
     return <div className="chat-room-list-container"><p>채팅방 목록을 불러오는 중입니다...</p></div>;
@@ -67,17 +96,12 @@ const ChatRoomListPage = () => {
           <p>아직 채팅방이 없습니다.</p>
         ) : (
           chatRooms.map((room) => (
-            <div key={room.id} className="chat-room-item" onClick={() => navigate(`/app/chat/${room.id}`, { state: { otherUserNickname: room.otherUserNickname } })}>
-              <div className="chat-room-avatar">
-                <img src={room.otherUserImageUrl} alt={room.otherUserNickname} />
-              </div>
+            <div key={room.id} className="chat-room-item" onClick={() => navigate(`/app/chat/${room.id}`)}>
               <div className="chat-room-info">
-                <h3>{room.otherUserNickname}</h3>
-                <p className="last-message">{room.lastMessage}</p>
+                <h3>{room.otherUserNickname || '알 수 없는 사용자'}</h3>
+                <p className="last-message">{room.lastMessage || '메시지 없음'}</p>
               </div>
-              {room.lastMessageTimestamp && (
-                  <span className="last-message-time">{new Date(room.lastMessageTimestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
-              )}
+              <span className="last-message-time">{room.lastMessageTimestamp ? new Date(room.lastMessageTimestamp).toLocaleTimeString() : ''}</span>
             </div>
           ))
         )}
