@@ -1,7 +1,7 @@
 import React from 'react';
-import './DogProfileCard.css';
+import './MyDogProfileCard.css';
 
-const DogProfileCard = ({ dog, onClick }) => {
+const MyDogProfileCard = ({ dog, onClick }) => {
   if (!dog) {
     return null; // or a loading/placeholder component
   }
@@ -11,7 +11,7 @@ const DogProfileCard = ({ dog, onClick }) => {
 
   return (
     <div className="dog-profile-card" onClick={onClick}>
-      <img
+      <img 
         src={dog.photoUrl || dog.imageUrl}
         alt={dog.name}
         className="dog-card-background-image"
@@ -24,7 +24,7 @@ const DogProfileCard = ({ dog, onClick }) => {
             {dog.city && dog.district && (
               <p className="dog-extra-info">{dog.city} {dog.district}</p>
             )}
-            {dog.distance && <p className="dog-extra-info">{dog.distance} 이내</p>}
+            {dog.distance && <p className="dog-extra-info">{dog.distance} ���내</p>}
           </div>
           <div className="dog-info-right">
             <p className="dog-profile-bio">{dog.bio || '한 줄 소개가 아직 없습니다.'}</p>
@@ -35,4 +35,4 @@ const DogProfileCard = ({ dog, onClick }) => {
   );
 };
 
-export default DogProfileCard;
+export default MyDogProfileCard;
