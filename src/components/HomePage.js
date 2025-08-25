@@ -102,7 +102,7 @@ function HomePage() {
     <div className="home-container">
       <section className="my-dog-section">
         <div className="my-dog-header-row">
-          <h2 className="section-title">내 강아지</h2>
+          <h2 className="section-title">내  강아지</h2>
           <button className="settings-button" aria-label="환경설정">
             <FiSettings size={28} color="#111" />
           </button>
