@@ -50,7 +50,10 @@ const LikesPage = () => {
         
             if (dogResponse.ok) {
               const dogs = await dogResponse.json();
-              const dog = dogs[0] || null;
+              const dog = dogs[0] ? {
+                ...dogs[0],
+                bio: dogs[0].description || dogs[0].bio // description을 bio로 매핑
+              } : null;
               return { ...request, dog, otherUserNickname };
             } else {
               return { ...request, dog: null, otherUserNickname };
@@ -185,11 +188,9 @@ const LikesPage = () => {
                   <DogProfileCard
                     dog={request.dog}
                     onClick={() => openModal({
-                      dog: request.dog,
-                      user: {
-                        id: activeTab === 'sent' ? request.toUserId : request.fromUserId,
-                        nickname: activeTab === 'sent' ? request.toUserNickname : request.fromUserNickname
-                      }
+                      ...request.dog,
+                      // 사용자 정보도 함께 전달 (필요한 경우)
+                      ownerName: activeTab === 'sent' ? request.toUserNickname : request.fromUserNickname
                     })}
                   />
                   {/* --- 여기까지 수정 --- */}

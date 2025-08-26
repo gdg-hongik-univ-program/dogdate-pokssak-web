@@ -65,7 +65,12 @@ function HomePage() {
             }
             const myDogsData = await myDogResponse.json();
             if (myDogsData && myDogsData.length > 0) {
-              setMyDog(myDogsData[0]);
+              const dog = myDogsData[0];
+              // API에서 description 필드가 있다면 bio로 매핑
+              setMyDog({
+                ...dog,
+                bio: dog.description || dog.bio // description을 bio로 매핑, 없으면 기존 bio 사용
+              });
             }
             else {
               setMyDog(null);
@@ -94,6 +99,7 @@ function HomePage() {
                   breed: dog.breed,
                   age: dog.age,
                   imageUrl: dog.photoUrl,
+                  bio: dog.description, // description을 bio로 매핑
                   // distance는 API에서 제공되지 않으므로 임시로 빈 값 또는 계산 로직 필요
                   distance: '' // API에서 제공되지 않음
                 })));
@@ -117,6 +123,7 @@ function HomePage() {
                 breed: dog.breed,
                 age: dog.age,
                 imageUrl: dog.photoUrl,
+                bio: dog.description, // description을 bio로 매핑
                 likes: dog.likeCount
               })));
             } else {

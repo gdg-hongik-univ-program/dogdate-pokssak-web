@@ -80,8 +80,13 @@ function MatchPage() {
             if (dogResponse.ok) {
               const dogs = await dogResponse.json();
               console.log(`MatchPage: Dogs data for user ${user.id}:`, dogs); // Added log
+              // API에서 description 필드를 bio로 매핑
+              const dogWithBio = dogs[0] ? {
+                ...dogs[0],
+                bio: dogs[0].description || dogs[0].bio // description을 bio로 매핑
+              } : null;
               // user 객체에 name 속성을 명시적으로 추가합니다. (nickname이 없을 경우 대비)
-              return { ...user, dog: dogs[0], name: user.nickname || user.username || user.name || `User ${user.id}` }; // Add name property, trying multiple properties for name
+              return { ...user, dog: dogWithBio, name: user.nickname || user.username || user.name || `User ${user.id}` }; // Add name property, trying multiple properties for name
             } else {
               console.error(`Failed to fetch dog for user ${user.id}: ${dogResponse.status} ${dogResponse.statusText}`); // Modified error log
               return { ...user, dog: null, name: user.nickname || `User ${user.id}` };
@@ -278,7 +283,13 @@ function MatchPage() {
       <div className='card-container'>
         <div 
           className="match-page-card-wrapper"
-          onClick={() => openModal(currentCard)}
+          onClick={() => openModal({
+            ...currentCard.dog,
+            city: currentCard.city,
+            district: currentCard.district,
+            // 강아지 정보와 사용자 정보를 결합
+            ownerName: currentCard.name
+          })}
           ref={cardRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}

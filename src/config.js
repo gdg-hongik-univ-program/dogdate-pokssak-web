@@ -1,3 +1,3 @@
 // src/config.js
-const BASE_URL = 'http://15.165.74.204:8080';
+const BASE_URL = 'https://8ccdee5e0b69.ngrok-free.app';
 export { BASE_URL };
