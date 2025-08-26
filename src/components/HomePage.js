@@ -170,7 +170,11 @@ function HomePage() {
           <h2 className="my-dog-title">내 강아지</h2>
         </div>
         <div className="my-dog-profile-wrapper">
-          <button className="settings-button settings-button-on-card" aria-label="환경설정">
+          <button 
+            className="settings-button settings-button-on-card" 
+            aria-label="환경설정"
+            onClick={() => navigate('/app/edit-profile')}
+          >
             <FiSettings size={28} color="#111" />
           </button>
           <TiltableDogCard dog={myDog} onClick={() => openModal(myDog)}>

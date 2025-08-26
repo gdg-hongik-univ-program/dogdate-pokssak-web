@@ -94,7 +94,9 @@ const ChatPage = () => {
   useEffect(() => {
     if (!numericUserId || error) return; 
 
-    const socket = new SockJS(`${BASE_URL}/ws-stomp`);
+    const socket = new SockJS(`${BASE_URL}/ws-stomp`, null, {
+      transports: ['websocket', 'xhr-streaming', 'xhr-polling']
+    });
     const stompClient = Stomp.over(socket);
     stompClientRef.current = stompClient;
 
@@ -106,8 +108,12 @@ const ChatPage = () => {
       });
     }, (stompError) => {
       console.error('STOMP Connection Error. Full error object:', stompError);
-      setError("채팅 서버 연결에 실패했습니다.");
+      console.error('Error type:', typeof stompError);
+      console.error('Error message:', stompError.message || stompError);
+      console.error('Socket state:', socket.readyState);
       console.log('현재 BASE_URL:', BASE_URL);
+      console.log('연결 시도 URL:', `${BASE_URL}/ws-stomp`);
+      setError(`채팅 서버 연결에 실패했습니다.\n잠시 후 다시 시도해주세요.`);
     });
 
     return () => {

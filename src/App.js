@@ -12,6 +12,7 @@ import MainLayout from './components/MainLayout';
 import HomePage from './components/HomePage'; // HomePage가 있다고 가정합니다.
 import LikesPage from './components/LikesPage';
 import MatchPage from './components/MatchPage';
+import ProfileEditPage from './components/ProfileEditPage';
 
 const SignupSuccessPage = () => (
   <div style={{ textAlign: 'center', marginTop: '50px', padding: '20px' }}>
@@ -44,6 +45,7 @@ function App() {
           <Route path="match" element={<MatchPage />} />
           <Route path="chat/:chatroomId" element={<ChatPage />} />
           <Route path="chat-list" element={<ChatRoomListPage />} />
+          <Route path="edit-profile" element={<ProfileEditPage />} />
         </Route>
 
         {/* 4. 정의되지 않은 경로로 접근 시 */}

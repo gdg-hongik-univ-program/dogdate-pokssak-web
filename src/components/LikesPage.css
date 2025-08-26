@@ -210,6 +210,9 @@
   display: flex;
   gap: 1.5rem;
   align-items: flex-start;
+  position: absolute;
+  left: 1.8rem;
+  bottom: 4rem;
 }
 
 .likes-dog-card-wrapper .dog-info-left {
@@ -276,6 +279,9 @@
   width: 150px;
   word-wrap: break-word;
   white-space: normal;
+  position: absolute;
+  left: 1.8rem;
+  bottom: 1.8rem;
 }
 
 /* 이미지 스타일 */
@@ -292,6 +298,46 @@
 
 .likes-dog-card-wrapper:hover .dog-card-background-image {
   transform: scale(1.05);
+}
+
+/* DogProfileCard 스타일 오버라이드 */
+.likes-dog-card-wrapper .dog-name {
+  font-size: 2.4rem !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.1 !important;
+  position: absolute !important;
+  left: 1.8rem !important;
+  bottom: 5rem !important;
+}
+
+.likes-dog-card-wrapper .dog-details {
+  font-size: 1rem !important;
+  color: #e0e0e0 !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: bold !important;
+  position: absolute !important;
+  left: 1.8rem !important;
+  bottom: 3.5rem !important;
+}
+
+.likes-dog-card-wrapper .dog-extra-info {
+  font-size: 1rem !important;
+  color: #e0e0e0 !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-weight: normal !important;
+  position: absolute !important;
+  left: 1.8rem !important;
+  bottom: 2.8rem !important;
 }
 
 /* 빈 상태 메시지 스타일 */

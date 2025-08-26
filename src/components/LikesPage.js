@@ -102,7 +102,10 @@ const LikesPage = () => {
         try {
           const resultJson = JSON.parse(resultText);
           if (resultJson.status === 'MATCHED') {
-            openModal({ type: 'match', matchedUser: { id: request.fromUserId, nickname: request.fromUserNickname, dog: request.dog } });
+            openModal({
+              ...request.dog,
+              ownerName: request.fromUserNickname
+            });
           } else {
             alert('매칭 요청을 수락했습니다.');
           }
