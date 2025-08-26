@@ -183,8 +183,8 @@ function MatchPage() {
         // UI를 막지 않고 콘솔에만 에러를 기록
         console.error('Like API call error:', error);
       });
-      // 좋아요를 누른 후에도 다음 카드로 넘어갑니다.
-      goToNextCard();
+      // 좋아요는 카드를 넘기지 않음
+      console.log(`Liked ${character.name}`);
     } else if (action === 'Skip') {
       console.log(`Skipping ${character.name}`);
       goToNextCard();
